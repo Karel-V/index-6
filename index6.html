@@ -1,0 +1,4650 @@
+<!doctype html>
+<html>
+<head>
+  <title>image browser</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="bootstrap/bootstrap-3.1.1.min.css" />
+	<link rel="stylesheet" href="bootstrap/bootstrap-multiselect.css" />
+ 	<link rel="stylesheet" href="js/jquery-ui-1.11.4/jquery-ui.css" />
+	<link rel="stylesheet" href="index6.css" />
+</head>
+<body>
+
+<nav id="nav_main" class="navbar navbar-default" style="z-index:10;max-width:120em;margin:auto;">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header" style="max-width:8.5%;">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" style="padding:8px;">Media<br />Browser</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav form-inline" style="width:25%;">
+
+        <li class="rel" id="address-bar" style="width:100%;">
+          <button id="menu" class="xi6" style="display:none;">=</button>
+        	<input type="text" name="path" id="path" class="form-control xi6 xabs click-through" value="" style="width:90%;" />
+        	<span id="files_count"></span>
+        	<input type="checkbox" name="recursive" id="recursive" class="xi6" title="recursive?" /><span class="checkbox_indicator"></span>
+        	<input type="checkbox" name="cache" id="cache" class="" title="cache?" /><span class="checkbox_indicator"></span>
+        </li>
+
+        <li style="display:none;" class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+        
+        
+      </ul>
+      
+      <ul class="nav navbar-nav navbar-right form-inline" style="width:66.667%;">
+        
+        <li class="fr dropdown col-sm-1" style="padding:15px 0;max-width:4em;">
+          <a href="#" style="padding:2px;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Help <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+					<li><a href="#"><button id="rescan-btn">rescan current folder recursive</button></a></li>
+					<li><a href="#"><span class="key">C</span>copy/enter layout</a></li>
+          <li><a href="#"><span class="key">D</span>dev()</a></li>
+				  <li><a href="#"><span class="key">E</span>show folders structure</a></li>
+					<li><a href="#"><span class="key">F</span>fullscreen <button id="fullscreen-btn">off</button></a></li>
+					<li><a href="#"><span class="key">G</span>grant label</a></li>
+            <li role="separator" class="divider"></li>
+          <li><a href="#"><span class="key">H</span>toggle serii</a></li>
+					<li><a href="#"><span class="key">I</span>detect dimensions of images</a></li>
+          <li><a href="#"><span class="key">J</span>jump_to_id()</a></li>
+
+					<li><a href="#"><span class="key">L</span>system-message box on/off</a></li>
+					<li><a href="#"><span class="key">M</span>cycle image sizing <button id="switch-btn">off</button></a></li>
+          <li><a href="#"><span class="key">N</span>toggle_shrink()</a></li>
+          <li><a href="#"><span class="key">O, )</span>toggle_star()</a></li>
+					<li><a href="#"><span class="key">P</span>presentation on/off <button id="presentation-btn">off</button></a></li>
+					<li><a href="#"><span class="key">R</span>revoke label</a></li>
+					<li><a href="#"><span class="key">S</span>slideshow on/off <button id="slideshow-btn">off</button></a></li>
+					<li><a href="#"><span class="key">T</span>toggle_folders_pane()</a></li>
+					<li><a href="#"><span class="key">V</span>apply last layout</a></li>
+					<li><a href="#"><span class="key">W</span>toggle captions (clearview) <button id="toggle-captions-btn">off</button></a></li>
+					<li><a href="#"><span class="key">X</span>toggle scroller()</a></li>
+					<li><a href="#"><span class="key">F2</span>rename file</a></li>
+					<li><a href="#"><span class="key">Ctrl+F2</span>rename displayed files by regex</a></li>
+					<li><a href="#"><span class="key">DEL</span>delete file</a></li>
+					<li><a href="#"><span class="key">Ctrl+C, Ctrl+V</span>copy/paste labels</a></li>
+					<li><a href="#"><span class="key">Ctrl+Shift+V</span>paste labels to all displayed images</a></li>
+					<li><a href="#"><span class="key">Ctrl+F</span>find file by regex (including path)<button id="find-file-btn">find file</button></a></li>
+          <li><a href="#"><span class="key">Shift+F, F3</span>find next</a></li>
+          <li><a href="#"><span class="key">Ctrl+G</span>find_id()</a></li>
+          <li><a href="#"><span class="key">Shift+O, Shift+) </span>show_starred_images()</a></li>
+					<li><a href="#"><span class="key">Shift+T</span>show_folders_pane()</a></li>
+					<li><a href="#"><span class="key">numpad -, +, 2, 4, 6, 8</span>grid size
+						<button id="add-row-btn">+row</button>
+						<button id="add-col-btn">+col</button>
+						<button id="del-row-btn">-row</button>
+						<button id="del-col-btn">-col</button>
+					</a></li>
+					<li><a href="#"><span class="key">movement</span>
+						<button id="move-next-btn">next item</button>
+						<button id="move-next-row-btn">next row</button>
+						<button id="move-next-page-btn">next page</button>
+						<button id="move-prev-btn">prev item</button>
+						<button id="move-prev-row-btn">prev row</button>
+						<button id="move-prev-page-btn">prev page</button>
+					</a></li>
+
+          </ul>
+        </li>
+
+        <li id="what_to_display" class="fr xcol-sm-1" style="xposition:absolute;z-index:10000;xfont-size:67%;height:2.6em;right:2px; xtop:2px;">
+
+          <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" style="font-size:inherit;" type="button" id="dropdownMenu1" data-selected="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              - vše -
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="overflow:auto;">
+
+              <div class="form-inline search-settings">
+                <div class="container-fluid">
+                  <button type="button" class="btn btn-primary" role="select-all">Vše</button>
+                  <button type="button" class="btn btn-info" role="deny-all">Nic</button>
+                  <button type="button" class="btn btn-default" role="select-none">Reset</button>
+                  <div class="fl cl"></div>
+                  <div class="form-group">
+                    <label for="search_modeAND" class="radio-inline"><input class="form-control inline-control" type="radio" value="AND" name="search_mode" id="search_modeAND" style="height:auto;"> AND</label>
+                  </div>
+                  <div class="form-group">
+                    <label for="search_modeOR" class="radio-inline"><input class="form-control" type="radio" value="OR" name="search_mode" id="search_modeOR" checked="checked" style="height:auto;"> OR</label>
+                  </div>
+                </div>
+              </div>
+
+            </ul>
+          </div>
+
+        </li>
+
+        <li id="exts_to_display" class="fr xcol-sm-1" style="xposition:absolute;z-index:10000;xfont-size:67%;height:2.6em;right:2px; xtop:2px;">
+
+          <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" style="font-size:inherit;" type="button" id="dropdownExts" data-selected="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              - vše -
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownExts" style="overflow:auto;">
+
+              <div class="form-inline search-settings">
+                <div class="container-fluid">
+                  <button type="button" class="btn btn-primary" role="select-all">Vše</button>
+                  <button type="button" class="btn btn-info" role="deny-all">Nic</button>
+                  <button type="button" class="btn btn-default" role="select-none">Reset</button>
+                  <div class="fl cl"></div>
+                  <div class="form-group">
+                    <label for="search_mode_extAND" class="radio-inline"><input class="form-control inline-control" type="radio" value="AND" name="search_mode_ext" id="search_mode_extAND" style="height:auto;"> AND</label>
+                  </div>
+                  <div class="form-group">
+                    <label for="search_mode_extOR" class="radio-inline"><input class="form-control" type="radio" value="OR" name="search_mode_ext" id="search_mode_extOR" checked="checked" style="height:auto;"> OR</label>
+                  </div>
+                </div>
+              </div>
+
+            </ul>
+          </div>
+
+        </li>
+
+      </ul>
+
+
+      
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+		
+		
+		<div id="options" style="display:none;">
+			<span id="close_options">×</span>
+			<div class="onload" style="display:none;text-align:center;margin-top:40%;">loading...</div>
+			<div class="content">
+			<h3>Shortcuts:</h3>
+				<ul id="shortcuts">
+					<li><button id="rescan-btn">rescan current folder recursive</button></li>
+					<li>C - copy/enter layout</li>
+          <li>D - dev()</li>
+					<li>E - show folders structure</li>
+					<li>F - fullscreen <button id="fullscreen-btn">off</button></li>
+					<li>G - grant label</li>
+          <li>H - toggle serii</li>
+					<li>I - detect dimensions of images</li>
+          <li>J - jump_to_id()</li>
+					<li>L - system-message box on/off</li>
+					<li>M - cycle image sizing <button id="switch-btn">off</button></li>
+          <li>N - toggle_shrink()</li>
+          <li>O, ) - toggle_star()</li>
+					<li>P - presentation on/off <button id="presentation-btn">off</button></li>
+					<li>R - revoke label</li>
+					<li>S - slideshow on/off <button id="slideshow-btn">off</button></li>
+					<li>T - toggle_folders_pane()</li>
+					<li>V - apply last layout</li>
+					<li>W - toggle captions (clearview) <button id="toggle-captions-btn">off</button></li>
+					<li>X - toggle scroller()</li>
+					<li>F2 - rename file</li>
+					<li>DEL - delete file</li>
+					<li>Ctrl+C, Ctrl+V - copy/paste labels</li>
+					<li>Ctrl+F - find file by regex (including path)<button id="find-file-btn">find file</button></li>
+          <li>Shift+F, F3 - find next</li>
+          <li>Ctrl+G - find_id()</li>
+          <li>Shift+O, Shift+)  - show_starred_images()</li>
+					<li>Shift+T - show_folders_pane()</li>
+					<li>numpad -, +, 2, 4, 6, 8 - grid size
+						<button id="add-row-btn">+row</button>
+						<button id="add-col-btn">+col</button>
+						<button id="del-row-btn">-row</button>
+						<button id="del-col-btn">-col</button>
+					</li>
+					<li>movement
+						<button id="move-next-btn">next item</button>
+						<button id="move-next-row-btn">next row</button>
+						<button id="move-next-page-btn">next page</button>
+						<button id="move-prev-btn">prev item</button>
+						<button id="move-prev-row-btn">prev row</button>
+						<button id="move-prev-page-btn">prev page</button>
+					</li>
+				</ul>
+				<!--<div class="form-group rel" id="address-bar">
+					<select name="path2" id="path2" class="abs"></select>
+					<input type="text" name="path" id="path" class="abs click-through" value="" />
+				</div>-->
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		
+		<div id="images" class="images contain"></div>
+		<div class="folders_pane"></div>
+		<div class="load-more" id="bottom" style="xmargin-top:10%;width:100%;float:left;"></div>
+    <div id="system-message" style="display:none;"></div>
+    <div id="system-log" class="text-def" style="xdisplay:none;"></div>
+
+    
+
+
+    <div id="over" class="modal fade" style="overflow:auto;" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">&nbsp;</h4>
+                </div>
+                <div class="modal-body next"></div>
+                <div class="modal-footer hidden">
+                    <button type="button" class="btn btn-default pull-left prev">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                        Předchozí
+                    </button>
+                    <button type="button" class="btn btn-primary next">
+                        Následující
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+<script type='text/javascript' src='js/scriptaculous-js-1.9.0/lib/prototype.js'></script>
+<script type='text/javascript' src='js/scriptaculous-js-1.9.0/src/scriptaculous.js'></script>
+<script type='text/javascript' src='js/resizable.js'></script>
+<script type='text/javascript' src='js/prototype-swipeables-master/swipeable.js'></script>
+
+<script type='text/javascript' src='js/jquery-2.1.1.js'></script>
+<script type='text/javascript' src='js/jquery-ui-1.11.4/jquery-ui.js'></script>
+
+<script type='text/javascript' src='grid.js'></script>
+
+<script type='text/javascript'>
+  var J = jQuery.noConflict();
+
+        // Fix incompatibilities between BootStrap and Prototype
+        // http://jsfiddle.net/dgervalle/e8Apv/
+        // http://www.softec.lu/site/DevelopersCorner/BootstrapPrototypeConflict
+        var disablePrototypeJS = function (method, pluginsToDisable) {
+                var handler = function (event) {  
+                    event.target[method] = undefined;
+                    setTimeout(function () {
+                        delete event.target[method];
+                    }, 0);
+                };
+                pluginsToDisable.each(function (plugin) { 
+                    J(window).on(method + '.bs.' + plugin, handler); 
+                });
+            },
+            pluginsToDisable = ['collapse', 'dropdown', 'modal', 'tooltip', 'popover', 'tab'];
+        disablePrototypeJS('show', pluginsToDisable);
+        disablePrototypeJS('hide', pluginsToDisable);
+        // End of fix.
+
+
+  // log all calls to J.remove
+  var proxied = J.fn.remove;
+  J.fn.remove = function() {
+
+      // cancel further video loading
+      vid = this.find("video");
+      if(vid.length){
+        vid[0].pause();
+        vid.find("source")[0].src="";
+        vid[0].load();
+      }
+
+      // try do de-cache image
+//       vid = this.find(".image");
+      if(this.hasClass("image")){
+        this.css("background-image","none");
+      }
+
+    return proxied.apply( this, arguments );
+  };
+
+
+</script>
+
+<script type='text/javascript' src='bootstrap/bootstrap-3.1.1.min.js'></script>
+<script type='text/javascript' src='bootstrap/bootstrap-multiselect.js'></script>
+
+<script type="text/javascript">
+var structure = {};
+var move_html_structure = "";
+function create_folders_object(){
+	folders.each(function(folder){
+		crumbs = folder.split(/\//);
+		local_structure = structure;
+		crumbs.without("").compact().each(function(crumb){
+			if(typeof(local_structure[crumb])!="undefined"){
+			// ok, continue checking one level deeper
+			} else {
+			// folder does not exist - create it. Next iteration will create deeper folders.
+				local_structure[crumb] = {};
+			}
+			local_structure = local_structure[crumb];
+		});
+	});
+	console.log(structure);
+}
+function map_folders(structure,path_prefix){
+  if(!path_prefix){path_prefix = "";}
+  var ignore_dot_folders = true;
+	var html_structure = new Element("ul",{});
+	Object.keys(structure).sort().each(function(key){
+		if(key.charAt(0)!="."){
+			html_structure.insert(new Element("li",{})
+                                .insert((new Element("a",{href:"#"+path_prefix+"/"+key+"&recursive=1"}).insert(new Element("span",{}).update("^^ "))).observe("click",function(e){update_hash({path:path_prefix+"/"+key+"&recursive=1"});e.stopPropagation();J("#over").modal("hide");}))
+                                .insert((new Element("a",{href:"#"+path_prefix+"/"+key}).insert(new Element("span",{}).update(key))).observe("click",function(e){update_hash({path:path_prefix+"/"+key+"&recursive=1"});e.stopPropagation();J("#over").modal("hide");}))
+      );
+			if(Object.keys(structure[key]).length){
+				html_structure.insert(new Element("ul",{}).insert(map_folders(structure[key],path_prefix+"/"+key)));
+			}
+		}
+	});
+	return html_structure;
+};
+function show_folders_structure(){
+  create_folders_object();
+  html_structure = new Element("div",{"class":"structure"}).insert(map_folders(structure));
+  J("#over .modal-body").html(html_structure);
+  J("#over .modal-title").text("Složky");
+	J("#over").modal("show");
+}
+
+var my_grid;
+var starred = {};
+var boot_time = true;
+var kb;
+var resizer;
+var cols = 3;
+var rows = 1;
+var remote_fs = "http://192.168.18.104/";
+var auto_recursive = false;
+var folders_loaded_index = [];
+var folders_load_queue = [];
+var images = [];
+var last_loaded_idx = 0;
+var pointer;
+var boot_pointer = 0;
+var navpath = null;
+var filename_extensions = [];
+var filtered_images = [];
+// var extended_images;
+var folders = [];
+var comments = [];
+var labels = ["***","*****","blonde","cute","play","smile"]; // sample labels for testing
+// 		new Ajax.Request(remote_fs+"labels.txt",{onComplete:function(req){labels = req.responseText.split(/\n/);},asynchronous:false,async:false});
+var selected_labels = [];
+var last_used_labels = [];
+var select_max_rows=18;
+var debug = false;
+var my_mode_switcher;
+var sc;
+var my_sorter;
+var sortitem;
+var sortorder;
+var slideshow_full_grid_interval_msec = 20000;
+var current_layout;
+var clipboard = {};
+var last_find_file = "";
+var dev_mode = false;
+var enable_draggable_resizeable = false;
+var preview_mode = false;
+var video_bookmarks = {};
+var video_volume = 0.1;
+
+var HOW_MANY_PARENT_FOLDERS_DISPLAYED = 4;
+
+document.observe("dom:loaded",boot);
+
+function boot(){
+  if(debug){console.log("boot");}
+
+  // X-JSON header workaround from https://gist.github.com/codemasher/8373493
+	// TL;DR: the short and nasty way:
+  Ajax.Response.prototype._getHeaderJSON = Prototype.emptyFunction;
+
+
+	if(hash=getArrayHash()){
+		
+    // No images loaded yet, filters will be populated with data from location.hash then.
+    prepare_filter(); // labels
+		prepare_filenamefilter(); // filename mask and extension
+// 		prepare_extfilter(); // filename mask and extension
+
+	  switch(hash.length){ // no breaks, cascade
+      case 13:
+        // #exts_to_display, search_mode_ext
+        // exts dropdown is populated within prepare_filenamefilter()
+      case 11:
+        // #what_to_display, search_mode
+        // labels dropdown is populated within prepare_filter()
+	    case 9:
+	      sortitem = hash[7]!=""?hash[7]:sortitem;
+	      sortorder = hash[8]!=""?hash[8]:sortorder;
+	    case 7:
+	      rows = (val = parseInt(hash[5]))>0?val:1;
+	      cols = (val = parseInt(hash[6]))>0?val:1;
+	    case 5:
+        // old-style label filter is managed by labels dropdown now
+	    case 4:
+	      $("filenamemask").value = hash[3];
+	    case 3:
+// 				idx = $("filenamefilter").select("option").collect(function(option,idx){return option.text==hash[2]?idx+1:false}).max();
+// 				if(!idx){$("filenamefilter").insert(new Element("option",{value:hash[2],selected:true}).update(hash[2]));idx=2;}
+// 				$("filenamefilter").selectedIndex = idx-1;
+	    case 2:
+	      boot_pointer = parseInt(hash[1]);
+	      init_pointer();
+	    case 1:
+	      navpath = hash[0];
+	      $("path").value = navpath;
+	    case 0:
+	      break;
+	  }
+	}
+
+	lastHash = hash;
+	lastPath = navpath;
+
+	if($("recursive") && location.href.indexOf("&recursive")!=-1){
+	  $("recursive").checked = true;
+	} else {
+	  $("recursive").checked = false;
+	}
+
+	my_grid = new Grid();
+	my_sorter = new Sorter(sortitem,sortorder);
+	my_mode_switcher = new Switcher("contain");
+// 	sc = new Scroller("template_name");
+
+	kb_monitor();
+	window_monitor();
+
+	swiper = $("images");
+	new Swipeable(swiper);
+	swiper.observe("swipe:right",function(){grid_move_prev_item();my_grid.load();});
+	swiper.observe("swipe:left",function(){grid_move_next_item();my_grid.load();});
+	swiper.observe("swipe:down",function(){grid_move_prev_row();my_grid.load();});
+	swiper.observe("swipe:up",function(){grid_move_next_row();my_grid.load();});
+
+	enable_mouse_wheel();
+// 	new Draggable("over"); // has to set some handle
+    J("#over").on("shown.bs.modal",function(){
+      J("#new_filename").focus();
+    });
+
+  load_video_bookmarks();
+
+	boot_time = false;
+  
+  // Launch data loading. Further data processing is driven by events.
+  load_data(navpath);
+
+}
+
+// function save_labels(){
+// if(debug){console.log("save_labels");}
+//   new Ajax.Request(remote_fs+"set_labels.php",{
+//     parameters:"labels="+labels.uniq().sort().without("").join("\n"),
+//     onComplete:function(req){alert(req.responseText);}
+//   });
+// }
+
+function ifnull(a,b){return typeof(a)=="undefined"||a==null?b:a;}
+
+function window_monitor(){
+  Event.observe(window,"resize",function(e){
+    new_size = document.body.getDimensions();
+    $$(".images>div.resized").each(function(div){
+      offsets = div.positionedOffset();
+      dx = new_size.width/div.dataset.dims.split(/,/g)[0];
+      dy = new_size.height/div.dataset.dims.split(/,/g)[1];
+      div.dataset.dims = Object.values(new_size);
+      div.setStyle({
+        width: 	dx*div.getWidth()	+"px",
+        height:	dy*div.getHeight()	+"px",
+        top:		dy*offsets.top	+"px",
+        left:		dx*offsets.left	+"px",
+      });
+    });
+  });
+}
+
+function enable_mouse_wheel(){
+	function callback(event) {
+			var normalized;
+			if(["option","select"].indexOf(event.target.tagName.toLowerCase())==-1 && J(event.target).parents(".structure").length==0){
+
+				if (event.wheelDelta) {
+						normalized = (event.wheelDelta % 120 - 0) == -0 ? event.wheelDelta / 120 : event.wheelDelta / 12;
+				} else {
+						var rawAmount = event.deltaY ? event.deltaY : event.detail;
+						normalized = -(rawAmount % 3 ? rawAmount * 10 : rawAmount / 3);
+				}
+
+				if(normalized<0){
+					grid_move_next_row();
+				} else {
+					grid_move_prev_row();
+				}
+				my_grid.load();
+
+			}
+	}
+
+	var event = 'onwheel' in document ? 'wheel' : 'onmousewheel' in document ? 'mousewheel' : 'DOMMouseScroll';
+	$("images").addEventListener(event, callback);
+}
+
+function init_bootstrap_filter(select){
+  J(select).multiselect({
+    includeSelectAllOption: true
+  });
+}
+
+function prepare_options(){
+if(debug){console.log("prepare_options");}
+// 	if(folders.length && (select=$("path2").update(""))){
+// 		folders.each(function(folder){
+// 				select.insert(new Element("option",{value:folder}).update(folder));
+// 		});
+// 	}
+}
+
+function has_option(select,search_options){
+  if(typeof(search_options)=="string"){
+    search_options = {text:search_options,value:search_options};
+  }
+  options = select.select("option");
+  var text = search_options.text;
+  var value = search_options.value;
+  return options.any(function(option){return option.text==text /* || option.value==value*/; });
+}
+
+function prepare_extfilter(){
+  if(debug){console.log("prepare_extfilter (dropdown)");}
+
+  exts = images.collect(function(image){return ifnull(image.ext,"").split(/,/g);}).flatten().compact().without("").uniq().sort();
+  ddwn = $("exts_to_display").down("ul.dropdown-menu");
+
+  if(!exts.length && boot_time){
+    // there are no images, thus no comments to populate. Possibly boot in progress, analyze location.hash then.
+    hash = getArrayHash();
+    if(hash){
+      if(typeof(hash[2])=="string" && hash[2]!=""){
+        // adopt old-style exts filtering
+        hash[11] = ifnull(hash[11],"").split("|").push(hash[4]).compact().without("").uniq().sort().join("|");
+      }
+      exts = ifnull(hash[11],"").split("|").compact().without("").uniq().sort();
+
+      btn = ddwn.up(".dropdown").down(".dropdown-toggle");
+      btn.dataset.selected = exts.join("|");
+      update_dropdown_button_caption(btn);
+    }
+  }
+
+  existing_exts = ddwn.select("input[type=checkbox][data-filter=in]").collect(function(input){return input.dataset.label;});
+  exts.each(function(ext){
+    // inject new labels - in the course of boot, when they are being extracted from location.hash, create them already checked.
+    if(existing_exts.indexOf(ext)==-1){
+      ddwn.insert(one_label(ext,checked=boot_time));
+    }
+  });
+
+  search_mode_ext = hash[12];
+  set_search_mode_ext(search_mode_ext);
+}
+
+function prepare_filter(){
+if(debug){console.log("prepare_filter (dropdown)");}
+
+//   labels = images.collect(function(image){return ifnull(image.comment,"").split(/,/g);}).flatten().compact().without("").uniq().sort();
+  labelstack = {};
+  images.each(function(image){ifnull(image.comment,"").split(",").each(function(label){labelstack[label] = true;});});
+  labels = Object.keys(labelstack).without("").sort();
+
+  ddwn = $("what_to_display").down("ul.dropdown-menu");
+  
+  if(!labels.length && boot_time){
+    // there are no images, thus no comments to populate. Possibly boot in progress, analyze location.hash then. 
+    hash = getArrayHash();
+    if(hash){
+//       if(typeof(hash[4])=="string" && hash[4]!=""){
+//         // adopt old-style label filtering
+//         hash[9] = ifnull(hash[9],"").split("|");
+//         hash[9].push(hash[4]);
+//         hash[9] = hash[9].compact().without("").uniq().sort().join("|");
+//       }
+      labels = ifnull(hash[9],"").split("|").compact().without("").uniq().sort();
+
+      btn = ddwn.up(".dropdown").down(".dropdown-toggle");
+      btn.dataset.selected = labels.join("|");
+      update_dropdown_button_caption(btn);
+    }
+  }
+  
+  existing_labels = ddwn.select("input[type=checkbox][data-filter=in]").collect(function(input){return input.dataset.label;}); 
+  labels.each(function(label){
+    // inject new labels - in the course of boot, when they are being extracted from location.hash, create them already checked.
+    if(existing_labels.indexOf(label)==-1){
+      ddwn.insert(one_label(label,checked=boot_time));
+    }      
+  });
+ 
+  search_mode = hash[10];
+  set_search_mode(search_mode);
+//   ddwn.select("input[type=radio][name=search_mode]").each(function(radio){
+//     radio.checked = (radio.id==("search_mode"+search_mode));
+//   });
+  
+
+
+}
+
+function set_search_mode(search_mode){
+  if(!search_mode){search_mode = "AND";}
+  $$("#what_to_display input[type=radio][name=search_mode]").each(function(radio){
+    radio.checked = (radio.id==("search_mode"+search_mode));
+  });
+//   update_hash({search_mode:search_mode});
+}
+
+function set_search_mode_ext(search_mode_ext){
+  if(!search_mode_ext){search_mode_ext = "AND";}
+  $$("#exts_to_display input[type=radio][name=search_mode_ext]").each(function(radio){
+    radio.checked = (radio.id==("search_mode_ext"+search_mode_ext));
+  });
+//   update_hash({search_mode:search_mode});
+}
+
+function prepare_filenamefilter(){
+if(debug){console.log("filenamefilter");}
+  if(!$("filter_holder")){
+    document.body.select("#nav_main .navbar-right").first().insert({top:new Element("li",{id:"filter_holder","class":"fr col-sm-4"})});
+  }
+  if(!$("filenamemask")){
+    document.body.select("#filter_holder").first().insert(new Element("input",{id:"filenamemask","class":"xi6 form-control",style:"width:60%;"}).observe("change",apply_filter));
+    document.body.select("#filter_holder").first().insert(new Element("input",{type:"checkbox",title:"case sensitive?",id:"case_insensitive","class":"xi6",checked:true,style:"width:5% !important;"}).observe("change",apply_filter)).insert(new Element("span",{"class":"checkbox_indicator"}));
+    document.body.select("#filter_holder").first().insert(new Element("input",{type:"checkbox",title:"preview_mode?",id:"preview_mode","class":"xi6",checked:false,style:"width:5% !important;"}).observe("change",function(e){toggle_preview_mode();})).insert(new Element("span",{"class":"checkbox_indicator"}));
+  }
+
+  prepare_extfilter();
+
+/*  if(!$("filenamefilter")){
+    document.body.select("#filter_holder").first().insert(new Element("select",{id:"filenamefilter","class":"form-control",style:"width:30%;padding:6px 0 6px 12px;"}).observe("change",apply_filter));
+  }
+  f = $("filenamefilter");
+//   f.update("");
+  if(!has_option(f,"- vše -")){f.insert(new Element("option",{value:""}).update("- vše -"));}
+  Object.values(filename_extensions).uniq().each(function(value){
+    if(typeof(value)=="string"){
+			if(!has_option(f,{value:value})){
+				f.insert(new Element("option",{value:value}).update(value));
+			}
+		}
+  });
+*/
+}
+
+var now_resizing = false;
+function prepare_grid(){my_grid = new Grid();}
+// function OLD_prepare_grid(){
+// if(debug){console.log("prepare_grid");}
+// 	c = $("images").update("");
+// 	$R(1,rows*cols).each(function(idx){
+// 		col_width = 100/cols;
+// 		row_height= 100/rows;
+// 		c.insert(div = new Element("div",{style:[
+// 			"width:" +(col_width) +"%",
+// 			"height:"+(row_height)+"%",
+// 			"top:"   +(parseInt((idx-1)/cols)*row_height) +"%",
+// 			"left:"  +(parseInt((idx-1) % cols)*col_width)+"%",
+// 			"position:absolute"
+// 		].join(";"),"data-afterDrag":0}).insert(new Element("div",{"class":"image"})));
+// 
+// 		div.observe("click",function(e){
+// 			var firedBy = e.findElement();
+// 			if(firedBy.tagName.toLowerCase()!="option"){
+// 				if(firedBy.up("div").dataset.afterDrag==1){
+// 					// just finished dragging or resizing - do not perform click
+// 					firedBy.up("div").dataset.afterDrag = 0;
+// 				} else {
+// 					console.log("image click");
+// 					show_grant_label_selector(firedBy.down(".label_selector"));
+// 				}
+// 			}
+// 		});
+// 
+// 		new Swipeable(div);
+// 		div.observe("tap",function(e){
+// 			var firedBy = e.findElement();
+// 			//alert("tap: firedBy="+firedBy.tagName+"."+firedBy.classNames());
+// 					show_grant_label_selector(firedBy.down(".label_selector"));
+// 			
+// 		});
+// 		
+// 		new Draggable(div,{
+// 		  onDrag:function(draggable,e){
+// 				if(now_resizing){// && draggable.id==now_resizing.id){
+// // 				  this.revert = true;
+// 				  draggable.finishDrag(e);
+// 				} else {
+// 					// console.log("not resizing?"); // not resizing => continue drag
+// 				}
+// 		  },
+// 		  onEnd:function(draggable,e){
+// 		    draggable.element.addClassName("resized");
+// 			  draggable.element.setStyle({opacity:1});
+// 			  draggable.element.dataset.afterDrag = 1;
+// 			  console.log("drag end");
+// 		  }
+// // 			onDrag:function(draggable,e){
+// // 			  if(draggable.beingResized){
+// // 			}
+// 		});
+// 
+// 		new Resizeable(div,{
+// 			duringresize:function(resizeable){
+// 			  now_resizing = resizeable;
+// 			},
+// 			resize:function(resizeable){
+// 			  now_resizing = false;
+// 			  resizeable.addClassName("resized");
+// 			  resizeable.setStyle({opacity:1});
+// 			  resizeable.dataset.dims = Object.values(document.body.getDimensions());
+// 			  resizeable.dataset.afterDrag = 1;
+// 			  console.log("resize end");
+// 			},
+// 		  top:12, right:12, bottom:12, left:12
+// 		});
+// 
+// 	});
+// 	
+// //	if(boot_time){grid_apply_layout();}
+// 
+// // 	$$(".images > div").each(function(div){
+// // 		d = div.getDimensions();
+// // 		p = div.positionedOffset();
+// // 		div.setStyle({top:p.top+"px",left:p.left+"px",width:d.width+"px",height:d.height+"px"});
+// // 	});
+// // ^^^ lost "rubberity" of boxes, better got resizable.js fixed
+// 
+// 	update_hash({rows:rows,cols:cols});
+// 		
+// }
+
+current_layout = "-0.05102040816326531,0.013944223107569721,0.9900398406374502,0.5568513119533528,7|0.4198250728862974,0.00398406374501992,0.44621513944223107,0.20845481049562684,11|0.4198250728862974,0.4701195219123506,0.18725099601593626,0.20845481049562684,8|0.4139941690962099,0.6613545816733067,0.3386454183266932,0.20845481049562684,9|0.6399416909620991,0.00199203187250996,0.34063745019920316,0.29737609329446063,5|0.6355685131195336,0.3426294820717131,0.2589641434262948,0.30029154518950435,4|0.6297376093294461,0.6075697211155379,0.2549800796812749,0.3075801749271137,3|0.7769679300291545,0.8685258964143426,0.1294820717131474,0.16326530612244897,2|0.6239067055393586,0.8665338645418327,0.13147410358565736,0.14431486880466474,1";
+current_layout = "0,0,100,50,700|40,0,44,22,1100|40,45,18,22,800|40,64,36,22,900|63,0,33,37,500|63,34,25,37,400|63,60,24,37,300|82,85,15,18,200|63,85,15,18,100";
+current_layout = "0,0,50,90,5|0,51,24,61,1|0,76,24,61,1|70,0,15,30,1000|70,20,15,30,1000|62,40,20,38,1000|62,61,24,38,3|62,86,14,17,1|80,86,14,20,2";
+current_layout = "0,0,50,90,5|0,51,24,61,1|0,76,24,61,1|40,86,14,21,1000|82,0,39,18,1000|62,40,20,38,1000|62,61,24,38,3|62,86,14,17,1|80,86,14,20,2";
+function grid_apply_layout(){
+  if(current_layout){
+    boxes = current_layout.split(/\|/g);
+		divs = $$(".images>div");
+		if(boxes.length!=divs.length){
+			rows = parseInt(Math.sqrt(boxes.length)); 
+			cols = parseInt(boxes.length/rows);
+			current_layout = $R(1,rows*cols).collect(function(idx){return boxes[idx-1];}).join("|");
+			prepare_grid();
+			if(!boot_time){
+			  grid_apply_layout();
+			  my_grid.load();
+			}
+			// no need to return true;
+		} else {
+		  divs.each(function(div,idx){
+		    lay = boxes[idx].split(/,/g);
+		    div.setStyle({
+					top: lay[0]+"%",
+					left:lay[1]+"%",
+					width:lay[2]+"%",
+					height:lay[3]+"%",
+					zIndex:lay[4],
+		    });
+		  });
+		}
+  }
+}
+
+function enter_layout(){
+	dw=document.body.getWidth();
+	dh=document.body.getHeight();
+	dw=$("images").getWidth();
+	dh=$("images").getHeight();
+	new_layout = prompt("enter new layout:",$$(".images>div").collect(function(div){
+		return [
+			div.positionedOffset().top/dh,
+			div.positionedOffset().left/dw,
+			div.getDimensions().width/dw,
+			div.getDimensions().height/dh,
+			div.getStyle("z-index")/100
+		].collect(function(value){return parseInt(value*100+.49);}).join(",");
+	}).join("|"));
+	if(new_layout && current_layout!=new_layout){
+	  current_layout = new_layout;
+	  grid_apply_layout();
+	}
+}
+
+function getHash(){
+	return location.hash.replace(/^#/,"");
+}
+function getArrayHash(){
+  return getHash().split("#");
+}
+
+function apply_filter(e){
+if(debug){console.log("apply_filter");}
+	filtered_images = filter_images(images);
+	my_grid.load();
+	if(e) e.findElement().blur();
+// 	if($("filter")) $("filter").blur();
+// 	if($("filenamefilter")) $("filenamefilter").blur();
+	$("files_count").update("("+filtered_images.length+"&nbsp;files)");
+// 	if(e.findElement("#filenamefilter") && $F("filenamemask")==""){
+// 	  $("filenamemask").value = $F("filenamefilter");
+// 	}
+}
+
+
+function filter_images(images){
+/**
+ *  ^(.(?!eizo))+$
+ *	classic((?! cum swallow).)*$
+ *	^((?!classic ).)*swallows
+ *  ^[^\/]*cum(?!(.*firing).)
+ */
+if(debug){console.log("filter_images (images.length = "+images.length);}
+  if(filtered_images.length && filtered_images[pointer]){
+    saved_image_id = filtered_images[pointer].id;
+  } else {
+    saved_image_id = false;
+  }
+
+	filtered_images = [];// = images;
+	var label = "";
+  
+  
+  // detect search parameters and promote them into the location.hash
+	if($("filter")){
+		label = $F("filter");
+		update_hash({filter:label});
+	}
+	var extfilter = "jpg|gif|png|jpeg|bmp|tif|wbem|webm|mp4|avi|flv|mkv|mov";
+	if($("filenamefilter") && $("filenamefilter")!=""){
+	  extfilter = $F("filenamefilter");
+		update_hash({filenamefilter:extfilter});
+	}
+  if(exts_in = $$("#exts_to_display .dropdown-menu input[type=checkbox]")){
+    all_checked_exts = exts_in
+        .findAll(function(chk){return chk.checked;})
+        .partition(function(chk){return chk.dataset.filter=="in";});
+    checked_exts = all_checked_exts[0]
+//         .findAll(function(chk){return chk.checked && chk.dataset.filter=="in";})
+        .collect(function(chk){return chk.dataset.label;});
+    denied_exts = all_checked_exts[1]
+        .collect(function(chk){return chk.dataset.label;});
+    update_hash({exts:checked_exts.join("|")});
+  }
+
+	var mask = "";
+	if($("filenamemask")){
+		mask = $F("filenamemask");
+		if(mask.search(/^\//)!=-1 && mask.search(/\/$/)!=-1){
+		  mask = mask.replace(/^\/(.*)\/$/,"$1");
+		}
+		update_hash({filenamemask:mask});
+// 		mask_re = new RegExp(mask,"i");
+    case_insensitive = $F("case_insensitive")=="on"?"i":""; 
+		mask_re = new RegExp(mask,case_insensitive);
+	}
+  if(all_chks = $$("#what_to_display .dropdown-menu input[type=checkbox]")){
+    all_checked_labels = all_chks
+        .findAll(function(chk){return chk.checked;})
+        .partition(function(chk){return chk.dataset.filter=="in";});
+    checked_labels = all_checked_labels[0]
+//         .findAll(function(chk){return chk.checked && chk.dataset.filter=="in";})
+        .collect(function(chk){return chk.dataset.label;});
+    denied_labels = all_checked_labels[1]
+        .collect(function(chk){return chk.dataset.label;});
+    update_hash({labels:checked_labels.join("|")});
+  }
+// 	extended_images = images.collect(function(image,idx){
+// 	  if(!image){return null;}
+// 	  var ext = image.path.replace(/^.*(\.[^.\/]+)$/,"$1");
+// 	  var pure_filename = image.filename;//image.path.replace(/^.*\/([^\/]+)$/,"$1");
+// 	  return  {
+// 			filename: image.path, 
+// 			pure_filename: pure_filename,
+// 			ext: ext,
+// 			id: idx, 
+// 			comment:image.comment,//comments[idx], 
+// // 			found:(comments[idx]==label || (comments[idx]!=null && comments[idx].split(",").indexOf(label)!=-1) || label=="") && (extfilter==ext || extfilter=="") && (mask=="" || pure_filename.search(mask_re)!=-1)
+// 			found:(image.comment==label || (image.comment!=null && image.comment.split(",").indexOf(label)!=-1) || label=="") && (extfilter==ext || extfilter=="") && (mask=="" || pure_filename.search(mask_re)!=-1)
+// 		};
+// 	});
+	
+		load_indicator = $("load-indicator");
+		total = images.length;
+
+    search_mode = "OR";
+    if((search_mode_radios = $$("input[name=search_mode]")).length){
+      search_mode = search_mode_radios.find(function(radio){return radio.checked;}).value;
+      update_hash({search_mode:search_mode});
+    }
+
+    search_mode_ext = "OR";
+    if((search_mode_radios = $$("input[name=search_mode_ext]")).length){
+      search_mode_ext = search_mode_radios.find(function(radio){return radio.checked;}).value;
+      update_hash({search_mode_ext:search_mode_ext});
+    }
+
+		images.each(function(image,idx){
+	  if(image) {
+			image.found = 
+			(
+// 			// filter by label selector
+// 			( checked_labels.length==0 && ( // ie. effectively disabled now
+// 				image.comment==label 
+// 				|| (image.comment!=null && image.comment.split(",").indexOf(label)!=-1)
+// 				|| label==""
+// 			)
+// 			|| (label=="- nic -" && (image.comment==null || image.comment==""))
+//       )
+false
+      // $$("input[name=search_mode]").find(function(radio){return radio.checked;}).value
+      || (search_mode=="OR"
+            ?
+           // search_mode == OR
+           (image.comment!=null // some comment exists 
+             && (!checked_labels.length || image.comment.split(",").any(function(imagecomment){return checked_labels.indexOf(imagecomment)!=-1;})) // image has got SOME of selected labels, or no label is selected
+             && !denied_labels.any(function(imagecomment){return image.comment.split(",").indexOf(imagecomment)!=-1;}) // image has got NONE of denied labels
+           )
+            :
+           // search_mode == AND
+           (image.comment!=null // some comment exists 
+             && (!checked_labels.length || checked_labels.all(function(imagecomment){return image.comment.split(",").indexOf(imagecomment)!=-1;})) // image has got ALL selected labels, or no label is selected
+             && !denied_labels.any(function(imagecomment){return image.comment.split(",").indexOf(imagecomment)!=-1;}) // image has got NONE of denied labels
+           )
+         )
+			)
+			// filter by extension selector
+// 			&& (extfilter==image.ext || extfilter=="")
+      && (search_mode_ext=="OR"
+            ?
+           // search_mode_ext == OR
+           (image.ext!=null // some ext exists
+             && (!checked_exts.length || checked_exts.indexOf(image.ext)!=-1) // image has got SOME of selected labels, or no label is selected
+             && !(denied_exts.indexOf(image.ext)!=-1) // image has got NONE of denied labels
+           )
+            :
+           // search_mode_ext == AND
+           (image.ext!=null // some comment exists
+             && (!checked_exts.length || checked_exts.indexOf(image.ext)!=-1) // image has got ALL selected labels, or no label is selected
+             && !(denied_exts.indexOf(image.ext)!=-1) // image has got NONE of denied labels
+           )
+			)
+			// filter by regular expression against label or filename (or the whole path)
+			&& (mask=="" 
+					|| (image.comment!=null && mask_re && image.comment.search(mask_re)!=-1)
+// 					|| image.filename.search(mask_re)!=-1
+					|| image.path.search(mask_re)!=-1
+			);
+// 			if(load_indicator){
+// 			  load_indicator.update(load_indicator.innerHTML +"<br />"+ "Processing "+idx+".&nbsp;of&nbsp;"+total);
+// 			}
+		}
+		if(image.found){
+			filtered_images.push(image);
+		}
+	});
+
+// 	filtered_images = images.compact().findAll(function(item){return item.found;}); // disabled, filtered_images are populated in "each" function above
+	if(!filtered_images.length){
+// 	  filtered_images = extended_images;
+	  filtered_images = images;
+	  if($("filenamemask")) $("filenamemask").setStyle({backgroundColor:"#fbb"});
+	} else {
+	  if($("filenamemask")) $("filenamemask").setStyle({backgroundColor:"white"});
+	}
+
+	if(saved_image_id===false){
+    init_pointer();
+  } else {
+    jump_to_imageid(saved_image_id);
+  }
+
+	return filtered_images;
+}
+
+function init_pointer(initial_value){
+if(debug){console.log("init_pointer");}
+  if(initial_value){
+    pointer = parseInt(initial_value);
+  } else 
+  if(boot_pointer){
+    pointer = parseInt(boot_pointer);
+  } else {
+    pointer = 0;
+  }
+}
+
+function update_hash(options){
+if(debug){console.log("update_hash: "+Object.toQueryString(options));}
+  hash = getHash().split("#");
+  newhash = {};
+  newhash.path = hash[0];
+  newhash.pointer = parseInt(hash[1]?hash[1]:(pointer?pointer:0));
+  newhash.filenamefilter = hash[2];
+  newhash.filenamemask = hash[3];
+  newhash.filter = hash[4];
+  newhash.rows = parseInt(hash[5]?hash[5]:rows);
+  newhash.cols = parseInt(hash[6]?hash[6]:cols);
+  newhash.sortitem = hash[7];
+  newhash.sortorder = hash[8];
+  newhash.labels = hash[9];
+  newhash.search_mode = hash[10];
+  newhash.exts = hash[11];
+  newhash.search_mode_ext = hash[12];
+
+  if(options.path!=null)   { newhash.path    = options.path; }
+  if(options.pointer!=null){ newhash.pointer = options.pointer; }
+  if(options.filenamefilter!=null){ newhash.filenamefilter = options.filenamefilter; }
+  if(options.filenamemask!=null){ newhash.filenamemask = options.filenamemask; }
+  if(options.filter!=null){ newhash.filter = options.filter; }
+  if(options.rows!=null){ newhash.rows = options.rows; }
+  if(options.cols!=null){ newhash.cols = options.cols; }
+  if(options.sortitem!=null){ newhash.sortitem = options.sortitem; }
+  if(options.sortorder!=null){ newhash.sortorder = options.sortorder; }
+  if(options.labels!=null){ newhash.labels = options.labels; }
+  if(options.search_mode!=null){ newhash.search_mode = options.search_mode; }
+  if(options.exts!=null){ newhash.exts = options.exts; }
+  if(options.search_mode_ext!=null){ newhash.search_mode_ext = options.search_mode_ext; }
+
+  window.location.hash =  [newhash.path, newhash.pointer, newhash.filenamefilter, newhash.filenamemask, newhash.filter, newhash.rows, newhash.cols, newhash.sortitem, newhash.sortorder, newhash.labels, newhash.search_mode, newhash.exts, newhash.search_mode_ext].join("#");
+}
+
+
+var default_selector;
+var default_deselector;
+
+
+var Selector = function(local_pointer){
+
+    this.change_handler = function(e){
+      change_handler.call(this,e);
+    }
+
+	var initialize = (function(that){
+// TODO: research how to get HTML selector when calling div.insert(new Selector(123))
+	  if(typeof(default_selector)=="undefined"){
+			create_default_selector();
+		}
+		that.element = default_selector.clone(deep=true);
+		that.element.dataset.local_pointer = local_pointer;
+		that.element
+			.observe("change", that.change_handler)
+			.observe("keydown", keydown_handler);
+	})(this);
+
+  function create_default_selector(){
+  	default_selector = new Element("select",{id:"set_label","class":"label_selector",style:"display:none;","data-local_pointer":-1});
+  	labels.uniq().without("").each(function(label){
+  		default_selector.insert(new Element("option",{value:label}).update(label));
+  	});
+  }
+
+  function change_handler(e){
+  	selected_labels = $F(this);
+  }
+
+  function keydown_handler(e){
+			selected_labels = $F(this);
+			local_pointer = this.dataset.local_pointer;
+			switch(e.keyCode){
+				case Event.KEY_RETURN:
+					labels_to_save = selected_labels.without("").join(",");
+          selected_labels.without("").each(function(label){last_used_labels.push(label);});
+					escaped_filename = filtered_images[local_pointer].path.replace(/'/g,"\\\'").replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26");
+					set_file_properties(escaped_filename,{label:labels_to_save});
+					all_labels = [ifnull(filtered_images[local_pointer].comment,"").split(","),labels_to_save].flatten().uniq().without("").sort().join(",");
+// 								comments[pointer] = all_labels;//.split(",");
+					filtered_images[local_pointer].comment = all_labels;
+					filtered_images[local_pointer].rank = compute_rank(filtered_images[local_pointer]);
+// 					this.up(".image").down(".comment").update(all_labels.replace(/,/g,", "));//.pulsate();
+					this.up(".image").down(".comment").update(all_labels.split(",").collect(function(label){return "<span>"+label+"</span>";}).join(""));//.pulsate();
+					this.up(".image").down(".pointer").update(get_image_infobox(filtered_images[local_pointer]));
+// 					populate_deselector(this.up(".image").down(".label_deselector"),all_labels);
+          this.up(".image").down(".label_deselector").populate.call(this.up(".image").down(".label_deselector"),all_labels);
+// 							case 71: // G
+				case Event.KEY_ESC:
+					this.hide();
+					this.size = 0;
+					break;
+				case Event.KEY_INSERT:
+					new_label = prompt("Nový štítek:");
+					labels.push(new_label);
+					this.insert(new Element("option",{value:new_label}).update(new_label));
+					this.size++;
+					break;
+			}
+  }
+
+}
+
+var Deselector = function(local_pointer){
+
+    this.populate = function(comment){
+      populate.call(this,comment);
+    };
+
+	var initialize = (function(that){
+// TODO: research how to get HTML selector when calling div.insert(new Selector(123))
+	  if(typeof(default_deselector)=="undefined"){
+			create_default_deselector();
+		}
+		that.element = default_deselector.clone(deep=true);
+		that.element.dataset.local_pointer = local_pointer;
+		that.element
+			.observe("change",change_handler)
+			.observe("keydown",keydown_handler);
+    that.element.populate = populate;
+// 		return selector;
+	})(this);
+
+  function create_default_deselector(){
+  	default_deselector = new Element("select",{id:"del_label","class":"label_deselector",style:"display:none;"});
+  }
+
+  function change_handler(e){
+  	selected_labels = $F(this);
+  }
+
+  function keydown_handler(e){
+  	selected_labels = $F(this);
+  	local_pointer = this.dataset.local_pointer;
+  	switch(e.keyCode){
+  		case Event.KEY_RETURN:
+  			labels_to_delete = selected_labels.without("").join(",");
+  			escaped_filename = filtered_images[local_pointer].path.replace(/'/g,"\\\'").replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26");
+  			set_file_properties(escaped_filename,{deletelabel:labels_to_delete});
+  			all_labels = ifnull(filtered_images[local_pointer].comment,"").split(",").findAll(function(comment){return labels_to_delete.indexOf(comment)==-1;}).flatten().uniq().without("").sort().join(",");//,labels_to_save]
+  	// 								comments[pointer] = all_labels;//.split(",");
+  			filtered_images[local_pointer].comment = all_labels;
+  			filtered_images[local_pointer].rank = compute_rank(filtered_images[local_pointer]);
+  	// 								this.up(".image").down(".comment").update(all_labels.replace(/,/g,", "));//.pulsate({from:.5,queue:"end"});
+  			this.up(".image").down(".comment").update(all_labels.split(",").collect(function(label){return "<span>"+label+"</span>";}).join(""));//.pulsate();
+  			this.up(".image").down(".pointer").update(get_image_infobox(filtered_images[local_pointer]));
+  			this.populate(all_labels);
+  	// 							case 82: // R
+  		case Event.KEY_ESC:
+  			this.hide();
+  			this.size = 0;
+  			break;
+  	}
+  }
+
+  function populate(comment){
+    var element;
+    if(this.element){
+      element = this.element;
+    } else {
+      element = this;
+    }
+  	element.update("");
+  	ifnull(comment,"- nic -").split(",").each(function(label){element.insert(new Element("option",{value:label}).update(label));});
+  }
+
+}
+
+
+function get_image_infobox(image){
+
+  // update image rank
+  image.rank = compute_rank(image);
+
+	box = String(image.filesize).replace(/(\d{1,3}|\G\d{3})(?=(?:\d{3})+(?!\d))/g,"$1&nbsp;") + "<br />" + // thousands separated
+				String(image.mtime) + "<br />" +//.replace(/ .*$/,"") + "<br />" + // just date. no time
+				"u"+String(image.utime) + "<br />" +//.replace(/ .*$/,"") + "<br />" + // just date. no time
+				image.width+" × "+image.height + "<br />" +
+				image.id + " ("+local_pointer+")" + "<br />" +
+				"rank: " + image.rank + "<br />" +
+				"cues: " + image.count_of_cues
+	return box;
+
+}
+
+function pin_image(imagediv){
+  imagediv.toggleClassName("pinned");
+}
+
+function html5video_onload(image){
+            var video_element = J("#yd"+image.id);
+            if(video_element.length && video_element[0].readyState==4){
+              if(video_element.length){
+                video_player = video_element.gVideo();
+                var local_pointer = video_element.parents(".image").data("pointer");
+                if(video_element[0].videoWidth && video_element[0].videoHeight){
+                  filtered_images[local_pointer].width = video_element[0].videoWidth;
+                  filtered_images[local_pointer].height = video_element[0].videoHeight;
+                }
+                normalize();
+                if(video_element.height() > video_element.parents(".image").height()){
+                  // too tall, set a proper width
+                  new_width_ratio = (video_element.width() * video_element.parents(".image").height()/video_element.height()) / video_element.parents(".image").width() * 100;
+                  video_element.css("width",new_width_ratio+"%");
+                }
+                if(!preview_mode){
+                  video_player[0].play();
+                }
+                video_player[0].setVolume(video_volume);
+  //               video_player[0].place_cues();
+  //               if(video_volume>0){
+  //                 video_player[0].muted = false;
+  //                 video_player[0].volume = video_volume;
+  //               } else {
+  //                 video_player[0].muted = true;
+  //               }
+              }
+            } else {
+              setTimeout(function(){html5video_onload(image);},100);
+            }
+          }
+
+function cleanup_events(div){
+  cleanup_prototypejs_events(div);
+  cleanup_jquery_events(div);
+}
+function cleanup_jquery_events(div){
+  domObjects = J(div).find("*");
+  domObjects.splice(0,0,div);
+  domObjects.each(function(idx){
+    if(J._data(this,"events")){
+      console.log([this,J._data(this,"events")]);
+      J(this).off();
+    }
+  });
+//   J._data(J(".images>div:first-child video")[0], "events")
+}
+function cleanup_prototypejs_events(div){
+// $$(".images>div:first-child,.images>div:first-child *").collect(function(node){eventRegistry = Element.getStorage(node).get("prototype_event_registry"); if(eventRegistry){return [node,eventRegistry.keys().join(",")];}else{return null;}}).compact();
+  domObjects = [div, div.select("*")].flatten();
+  domObjects.each(function(node){
+    eventRegistry = Element.getStorage(node).get("prototype_event_registry");
+    if(eventRegistry){
+      node.stopObserving();
+    } else { // node has no registered events
+      return false;
+    }
+  });
+}
+
+function load_image(local_pointer,div){
+		var image = filtered_images[local_pointer];
+		if(image){
+			var filename = image.path;
+			var escaped_filename = filename.replace(/%/g,"%25").replace(/'/g,"\'").replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26");
+
+      var f = filename.split("/");
+			var title = f.pop(); 
+      var parent_folders = $R(1,HOW_MANY_PARENT_FOLDERS_DISPLAYED).collect(function(idx){return f.pop();}).reverse().join("/") + "/";
+			var displayed_title = "<span class='path shadow_outline'>"+parent_folders+"</span><span class='shadow'>"+title+"</span>";
+      var file_url = remote_fs+"d/"+(escaped_filename.replace(/^.*\/Downloads\//,"")+(preview_mode?"?mode=preview":""));
+
+			div.dataset.pointer = local_pointer;
+      J(div).data("pointer",local_pointer);
+
+      if([".webm",".avi",".mp4",".mkv",".mpeg",".mov"].indexOf(image.ext.toLowerCase())!=-1){
+        if(!div.down("video source") || decodeURIComponent(div.down("video source").src)!=file_url){
+          mimetype = image.ext.toLowerCase().replace(/^\./,"");
+          mimetypes = {mkv:"x-matroska"};
+          if(mimetypes[mimetype]){
+            mimetype = mimetypes[mimetype];
+          }
+          mimetype = "video/"+mimetype;
+          muted = video_volume>0?"":"muted";
+          video_element = ("<div class='ghinda-video-player'><video id='yd"+image.id+"' preload='none' controls "+(preview_mode?"":"autoplay")+" "+muted+" loop poster='/mapdrive/images/warning.png'><source src=\""+(file_url)+"\" type='"+mimetype+"'></video></div>");
+          cleanup_events(div);
+          div.update(
+//             J(J(video_element).on("remove",function(e){
+//               debugger;
+//               console.log(this);
+//             })).html()
+            video_element
+          );
+          html5video_onload(image);
+        } else {
+          // keep the webm file running
+          return true;
+        }
+      } else if([".flv"].indexOf(image.ext)!=-1) {
+        if(!div.down("object") || div.down("object param[name=url]").value!=file_url){
+          div_index = image.id;//local_pointer-pointer;
+          myListeners[div_index] = new Listener(div_index, onInitFunction = function(){
+            var video_element = J("#yd"+image.id);
+            if(video_element.length){
+              video_player = video_element.gVideo({listener:myListeners[div_index]});
+              video_element[0].SetVariable("method:setUrl", file_url);
+              if(!preview_mode){
+                video_element[0].SetVariable("method:play", "");
+              }
+              video_player[0].setVolume(video_volume);
+
+              video_element.css({height: (parseInt(video_element.css("height"))-100)+"px"});
+              new_width = parseInt( parseInt(video_element.css("height")) *16/9 / parseInt(video_element.css("width"))*100 );
+              if(new_width>100){
+                new_width = 100;
+              }
+              video_element.css({width: new_width+"%" });
+            }
+          });
+          video_element = new Element("div",{}).addClassName("ghinda-video-player").insert(new Element("object",{id:"yd"+image.id,"data-id":image.id,type:"application/x-shockwave-flash",data:"/player_flv_js.swf",width:"100%",height:"100%"})
+            .insert(new Element("param",{name:"movie",value:"/player_flv_js.swf"}))
+            .insert(new Element("param",{name:"FlashVars",value:"listener=myListeners["+div_index+"]&amp;interval=200&amp;useHandCursor=0&amp;bgcolor=000000&amp;buffer=9"}))
+            .insert(new Element("param",{name:"url",value:file_url}))
+          );
+          cleanup_events(div);
+          div.update(
+            video_element
+          );
+//           setTimeout(,1000);
+        } else {
+          // keep the flv file running
+          return true;
+        }
+      } else {
+        cleanup_events(div);
+        div.update("");
+      }
+
+			div
+				.setStyle({backgroundImage:[".jpg",".gif",".png",".jpeg",".bmp"].indexOf(image.ext.toLowerCase())!=-1?"url('"+file_url.replace(/'/g,"\\\'")+"')":"none"})
+				.insert(new Element("div",{}).addClassName("star_frame"+(image.comment.split(",").indexOf("*")!=-1?" star":"")))
+				.insert(new Element("span",{"class":"pointer right"}).update(get_image_infobox(image)))
+				.insert(new Element("span",{"class":"comment"}).update(ifnull(image.comment,"").split(/,/g).sort().collect(function(label){return '<span>'+label+'</span>';}).join('')))
+				.insert(new Element("span",{"class":"info"}).insert(new Element("a",{href:file_url}).observe("click",function(e){
+				  e.stop();
+				  firedBy = e.findElement();
+				  rename_file_dialog(firedBy.up("div").dataset.pointer);
+				}).update(displayed_title)))
+        .insert(new Element("div",{}).addClassName("pinner").observe("click",function(e){
+          e.stop();
+          var imagediv = e.findElement().up(".image");
+          pin_image(imagediv);
+        }))
+				.insert(new Selector(local_pointer).element)
+				.insert((function(){
+          labeldeselector = new Deselector(local_pointer);
+          labeldeselector.populate(image.comment);
+// 			    populate_deselector(labeldeselector,image.comment);
+          return labeldeselector.element;
+        })())
+      ;
+
+
+		}
+}
+
+
+
+function get_image_info(){
+if(debug){console.log("get_image_info");}
+  divs = $$(".images .image");
+  divs.each(function(div,idx){
+    var img_url = div.getStyle("background-image").replace(/^.*\((.*)\).*$/,"$1");
+// 				var pointer = parseInt(div.down(".pointer").innerHTML);
+// 				var pointer = parseInt(div.dataset.pointer);
+// 				var glob_pointer = filtered_images.pluck("id").indexOf(pointer);
+    if(!div.down(".image_info")){
+			setTimeout(function(){
+// 				var filtered_image = filtered_images[glob_pointer];
+// 				var imageurl = remote_fs+"getfile.php?fullname="+filtered_images[glob_pointer].path;
+				var im = new Element("img",{style:"display:none;"}).observe("load",function(e){
+					var image_info = this.getWidth()+"×"+this.getHeight();
+// 					filtered_images[glob_pointer].image_info = image_info;
+					div.insert(new Element("span",{"class":"image_info"}).update(image_info));
+	//         im.remove();
+					
+					setTimeout(function(){im.fade({afterFinish:function(){im.remove();}});},100+100*idx);
+				});
+				document.body.insert({top:im});
+				im.src = img_url; // fire onload event
+			},1000+100*idx);
+//     } else {
+//       div.insert(new Element("span",{"class":"image_info"}).update(filtered_images[glob_pointer].image_info));
+    }
+  });
+}
+
+function delete_file(ypointer){
+if(debug){console.log("delete_file");}
+  if(ypointer){pointer=ypointer;} // almost never happens
+	var file = filtered_images[pointer];
+// 	var imagepointer = file.id;
+	var filename = file.path;
+	var escaped_filename = file.path.replace("'","\\\'").replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26");
+	if(confirm("Skutečně smazat?")){
+		set_file_properties(escaped_filename, {delete:"trash"});
+   image_idx = null;
+   images.find(function(image,idx){if(image.id==filtered_images[pointer].id){image_idx=idx;return true;}else{return false;}});
+   delete images[image_idx];
+   delete filtered_images[pointer];
+// 		images[pointer] = null;
+		filtered_images[pointer] = null;
+		images = images.compact();
+		filtered_images = filtered_images.compact();
+		boot_pointer = pointer;
+// 		my_grid.load();
+//    grid_move_next_item();
+		$("files_count").update("("+filtered_images.length+"&nbsp;files)");
+}
+}
+
+function map_folders_to_move_to(structure,path_prefix){
+  if(!path_prefix){path_prefix = "";}
+  var ignore_dot_folders = true;
+	var html_structure = new Element("ul",{});
+
+	Object.keys(structure).sort().each(function(key){
+		if(key.charAt(0)!="."){
+			html_structure.insert(
+        new Element("li",{}).addClassName("open")
+            .insert(new Element("span",{}).addClassName("toggler")
+              .observe("click",function(e){
+                e.preventDefault();
+                J(e.target).parents("li").toggleClass("closed").toggleClass("open");
+              })
+            )
+            .insert(new Element("span",{"data-path":path_prefix+"/"+key}).addClassName("foldername btn btn-success btn-xs").update(key))
+      );
+			if(Object.keys(structure[key]).length){
+				html_structure.insert(map_folders_to_move_to(structure[key],path_prefix+"/"+key));
+			}
+		}
+	});
+	return html_structure;
+};
+
+var last_regex = "/^(.*)$/gi";
+var last_regreplace = "$1";
+function mass_rename_dialog(){
+
+    regex_html = J("<div class='form-group'><label for='regex'>regex:</label><input type='text' name='regex' id='regex' value='"+last_regex+"' /><label for='regreplace'>replace:</label><input type='text' name='regreplace' id='regreplace' autofocus='autofocus' value='"+last_regreplace+"' /></div><ol class='regex_results small'></ol>")
+      .on("keydown",function(e){
+        if(e.keyCode==13){
+          var ctrlKey = e.ctrlKey;
+          var regex = J(this).find("#regex").val().split(/^\/(.*)\/([gi]*)$/);
+          var regreplace = J(this).find("#regreplace").val();
+          var rx= new RegExp(regex[1],regex[2]);
+          last_regex = J(this).find("#regex").val();
+          last_regreplace = regreplace;
+
+          J(".regex_results").html("");
+
+
+          J.each(J(".image"),function(idx,item){
+            var local_pointer = item.dataset.pointer;//J(item).data("pointer");
+            if(local_pointer < filtered_images.length){ // ensure you are not renaming the same image second time
+
+              var path = filtered_images[ local_pointer ].path;
+
+              folders = path.split(/\/|\\/);
+              var filename = folders.pop();
+              var new_filename = filename.replace(rx,regreplace);
+              folders.push(new_filename);
+              var new_path = folders.join("/");
+              var will_rename = path!=new_path;
+
+              J(".regex_results").append(J("<li>"+filename+" <span class='"+(will_rename?"text-danger":"text-muted")+"'> =&gt;&nbsp;&nbsp;"+new_filename+"</span></li>"));
+
+              if(ctrlKey && will_rename){
+                // execute
+  //               console.log("path",path,"new_path",new_path);
+                set_file_properties(encodeURIComponent(path), {rename: encodeURIComponent(new_path), local_pointer: local_pointer, async:false});
+
+            		J(item).find(".info").html(new_filename);
+            		filtered_images[local_pointer].path = new_path;
+            		filtered_images[local_pointer].filename = new_filename;
+
+  //             } else {
+  //               // preview results
+  //               alert("preview");
+              }
+            }
+
+          });
+
+          if(ctrlKey){
+              J("#over").modal("hide");
+          }
+        }
+      });
+
+    J("#over .modal-body").html(["<div class='small gray'>Enter => preview, Ctrl+Enter => execute</div>",regex_html]);
+    J("#over .modal-title").html("Rename2 visible files by regex.");
+  	J("#over").modal("show");
+//     J("#regreplace").focus();
+    setTimeout(function(){J("#regreplace").focus();},100);
+
+}
+
+
+function rename_file_dialog(local_pointer){
+if(debug){console.log("rename_file");}
+	var file = filtered_images[local_pointer];
+// 	var imagepointer = file.id;
+	var fullname = file.path;
+	var escaped_filename = file.path;//.replace("'","\\\'").replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26");
+	var title = file.filename;//filename.replace(/^.*\//,"");
+
+  var afterRename = function(input, firedBy){ // input ~ J("#new_filename")
+    var local_pointer   = input.data("local_pointer");
+    var source_fullname = input.data("escaped_filename");
+    var target_fullname = input.val();
+          if(target_fullname.search(/^\//)!=-1){
+            // fullname is a full path
+          } else {
+            // fullname is just a filename, prepend some path
+            if(firedBy){
+              // some folder has been selected, use specified path
+              target_fullname = firedBy.data("path") + "/" + target_fullname;
+            } else {
+              // just a filename is being changed, keep path
+              target_fullname = source_fullname.replace(/\/[^\/]*$/,"") + "/" + target_fullname;
+            }
+          }
+
+    set_file_properties(encodeURIComponent(source_fullname), {rename: encodeURIComponent(target_fullname), local_pointer: local_pointer});
+
+    var target_filename = target_fullname.replace(/^.*\//,"");
+        		J(".images .image[data-pointer="+local_pointer+"] .info").html(target_filename);
+        		filtered_images[local_pointer].path = target_fullname;
+        		filtered_images[local_pointer].filename = target_filename;
+  };
+
+
+    if(jQuery.isEmptyObject(structure)){create_folders_object();}
+    if(!move_html_structure){
+      move_html_structure = new Element("div",{"class":"structure"}).insert(new Element("div",{"class":"last_folders_used"})).insert(map_folders_to_move_to(structure));
+      move_html_structure.on("click",function(e){
+        e.preventDefault();
+
+        var firedBy = J(e.target);
+        if(firedBy.hasClass("foldername")){
+          afterRename(J("#new_filename"),firedBy);
+
+//           var local_pointer = J("#new_filename").data("local_pointer");
+//           var escaped_filename = J("#new_filename").data("escaped_filename");
+//           var new_filename = J("#new_filename").val();
+//           var new_fullname;
+//           if(new_filename.search(/^\//)!=-1){
+//             // filename is already a full path
+//             new_fullname = new_filename;
+//             new_filename = new_fullname.replace(/^.*\//,"");
+//           } else {
+//             new_fullname = firedBy.data("path") + "/" +  new_filename;
+//           }
+//           set_file_properties(escaped_filename, {rename:new_fullname});
+//
+//         		$$(".images .image .info")[local_pointer - pointer].update(new_fullname);//.pulsate();
+//         		filtered_images[local_pointer].path = new_fullname;
+//         		filtered_images[local_pointer].filename = new_filename;
+
+          if(J(".last_folders_used").find("span[data-path='"+firedBy.data("path")+"']").length == 0){
+            J(".last_folders_used").prepend(firedBy.clone(true));
+          }
+          J("#over").modal("hide");
+        }
+
+      });
+    }
+
+    new_filename = J("<div class='form-group'><label>Název:</label><input type='text' name='new_filename' id='new_filename' data-escaped_filename='"+escaped_filename+"' data-local_pointer='"+local_pointer+"' value='"+title+"' /></div>") // badly escaped characters are managed below function
+      .on("keydown",function(e){
+        if(e.keyCode==13){
+          if(e.ctrlKey){
+            // prepend last used folder, do not rename
+            last_folder = J(".last_folders_used span.foldername:first").data("path");
+            if(last_folder){
+              J("#new_filename").val(last_folder + "/" + J("#new_filename").val());
+            }
+            return true;
+          }
+          options = {
+            source_fullname: J("#new_filename").data("escaped_filename"),
+            target_fullname: J("#new_filename").val(),
+          };
+          afterRename(J("#new_filename"));
+
+//           if(new_filename = J("#new_filename").val()){
+//             var local_pointer = J("#new_filename").data("local_pointer");
+//             var escaped_filename = J("#new_filename").data("escaped_filename");
+//             var new_fullname;
+//             if(new_filename.search(/^\//)!=-1){
+//               // filename is already a full path
+//               new_fullname = new_filename;
+//               new_filename = new_fullname.replace(/^.*\//,"");
+//             } else {
+//           		new_fullname = file.path.replace(file.filename,new_filename);
+//             }
+//         		set_file_properties(escaped_filename, {rename:new_fullname});
+//         		$$(".images .image .info")[local_pointer - pointer].update(new_fullname);//.pulsate();
+//
+//         		filtered_images[local_pointer].path = new_fullname;
+//         		filtered_images[local_pointer].filename = new_filename;
+  	        J("#over").modal("hide");
+//           }
+        }
+      });
+new_filename.find("input").attr("data-escaped_filename",escaped_filename);
+new_filename.find("input").val(title);
+
+    J("#over .modal-body").html([new_filename,move_html_structure]);
+    J("#over .modal-title").html("Rename file");
+  	J("#over").modal("show");
+
+// select current image folder and scroll to it
+var mytarget = J("*[data-path='"+(filtered_images[local_pointer].path.replace("/"+filtered_images[local_pointer].filename,""))+"']").parent("li");
+/*if(mytarget)*/mytarget.css({"background-color":"rgba(0, 128, 192, 0.2)","padding":"5px"});
+myparent = mytarget.parents(".structure");
+
+this_li = mytarget;
+
+J(this_li).parent("ul").children("li").removeClass("open").addClass("closed");
+
+this_li.parents("ul").each(function(idx,ul){
+ li = J(ul).prev("li");
+ if(li && li.siblings("li").length){
+  li.siblings("li").removeClass("open").addClass("closed");
+  li.addClass("open").removeClass("closed");
+ }
+});
+
+myparent.scrollTop(mytarget.position().top + myparent.scrollTop());
+
+//   }
+
+return;
+//   new_filename = prompt("Přejmenovat:",title);
+//   if(new_filename){
+// 		set_file_properties(escaped_filename, {rename:new_filename});
+// 		$$(".images .image .info")[local_pointer - pointer].update(new_filename);//.pulsate();
+//
+// 		new_fullname = file.path.replace(file.filename,new_filename);
+// 		filtered_images[local_pointer].path = new_fullname;
+// 		filtered_images[local_pointer].filename = new_filename;
+// // 		images[local_pointer].path = new_fullname;
+// // 		images[local_pointer].filename = new_filename;
+//   }
+}
+
+function set_file(e){
+if(debug){console.log("set_file");}
+	button = e.findElement("button");
+	var escaped_filename = button.dataset.filename.replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26");
+	set_file_properties(escaped_filename, {label:button.dataset.label});
+}
+
+function copy_labels(local_pointer){
+  if(local_pointer == null){local_pointer = pointer;}
+  clipboard.labels = filtered_images[local_pointer].comment;
+}
+function paste_labels_to_displayed_images(){
+  J.each(J(".image"),function(idx,item){
+    var local_pointer = item.dataset.pointer;//J(item).data("pointer");
+    paste_labels(local_pointer);
+  });
+}
+function paste_labels(local_pointer){
+  if(local_pointer == null){local_pointer = pointer;}
+	escaped_filename = filtered_images[local_pointer].path.replace(/'/g,"\\\'").replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26");
+  set_file_properties(escaped_filename,{label:clipboard.labels});
+	all_labels = [ifnull(filtered_images[local_pointer].comment,"").split(","),clipboard.labels].flatten().uniq().without("").sort().join(",");
+	filtered_images[local_pointer].comment = all_labels;
+
+								div = $$(".images .image").find(function(div){return div.dataset.pointer==local_pointer;});
+								div.down(".comment").update(all_labels.split(",").collect(function(label){return "<span>"+label+"</span>";}).join(""));//.pulsate();
+// 								populate_deselector(div.down(".label_deselector"),all_labels);
+                try {
+//                   Deselector.populate.call(div.down(".label_deselector"),all_labels);
+                  div.down(".label_deselector").populate.call(div.down(".label_deselector"),all_labels);
+                } catch (err){
+                  console.log("Deselector not populated. "+err.message);
+                }
+
+}
+function reapply_last_label(){
+  label = last_used_labels.last();
+  saved_labels_from_clipboard = Object.clone(clipboard.labels);
+  clipboard.labels = [label];
+  paste_labels();
+  clipboard.labels = saved_labels_from_clipboard;
+  
+}
+
+var ajax_call_connections = 0;
+var ajax_call_queue = [];
+function ajax_call_manager(url,options){
+  // throttle concurrent calls to specified number
+  // onComplete-event-driven queue
+  var max_connections = 1;
+
+    ajax_call_queue.push({url:url,options:options});
+    if(ajax_call_connections<max_connections){
+      // fire the queue
+      ajax_queue_processor();
+    }
+}
+function ajax_queue_processor(){
+  new_connection = ajax_call_queue.pop();
+  url = new_connection.url;
+  options = new_connection.options;
+  var old_create = options.onCreate;
+  options.onCreate = function(req){
+    ajax_call_connections++;
+    old_create(req);
+  };
+  var old_complete = options.onComplete;
+  options.onComplete = function(req){
+    ajax_call_connections--;
+    if(ajax_call_queue.length){
+      console.log(ajax_call_queue);
+      ajax_queue_processor();
+    }
+    old_complete(req);
+  };
+  new Ajax.Request(url,options);
+}
+
+function renaming_failed(properties){
+  // revert filtered_images[?] properties (path, filename)
+  // revert .images .image .info text (filename)
+  orig_path = properties.escaped_filename;
+  orig_filename = properties.escaped_filename.replace(/^.*\//,"");
+
+  filtered_images[properties.local_pointer].path = decodeURIComponent(orig_path);
+  filtered_images[properties.local_pointer].filename = decodeURIComponent(orig_filename);
+  J(".images .image[data-pointer="+properties.local_pointer+"] .info").html(decodeURIComponent(orig_filename));
+}
+
+function set_file_properties(escaped_filename,properties){
+if(debug){console.log("set_file_properties");}
+//   escaped_filename = encodeURIComponent(escaped_filename);
+//   escaped_filename = escaped_filename.replace("&","%26");
+  var parameters = Object.keys(properties).collect(function(key){return key+"="+properties[key];}).join("&");
+          properties.escaped_filename = escaped_filename;
+//   if(!confirm("setfile.php?fullname="+escaped_filename+"\n"+parameters)){return false;}
+
+  if(properties.local_pointer){
+    filtered_images[properties.local_pointer].utimehash = (new Date()).getTime();
+    filtered_images[properties.local_pointer].utime =     ((new Date()).toLocaleString()).replace(/\. /g,".");
+  }
+// 	new Ajax.Request(remote_fs+"setfile.php?fullname="+escaped_filename,{
+	ajax_call_manager(remote_fs+"setfile.php?fullname="+escaped_filename,{
+	  parameters:parameters,
+	  onComplete:function(req){
+// 	    alert(req.responseText);
+	    if($("system-message").show()){
+				$("system-message").update(req.responseText.replace(/\n/g,"<br />")).show();
+				setTimeout(function(){$("system-message").hide();},3000);
+        if(req.responseText.search("Renaming failed")!=-1){
+          renaming_failed(properties);
+        }
+	    }
+	  },
+	  onException:function(that, exception){
+	    console.log(exception);
+      renaming_failed(properties);
+	    alert("Exception: " + exception.stack);
+	  },
+	  
+			asynchronous:(properties.async?false:true),
+			method:"POST",
+			requestHeaders:{"Origin":"localhost"},
+			onCreate: function(response) { // here comes the fix
+				var t = response.transport; 
+				t.setRequestHeader = t.setRequestHeader.wrap(function(original, k, v) { 
+					if (/^(accept|accept-language|content-language)$/i.test(k)) 
+						return original(k, v); 
+					if (/^content-type$/i.test(k) && 
+						/^(application\/x-www-form-urlencoded|multipart\/form-data|text\/plain)(;.+)?$/i.test(v)) 
+						return original(k, v); 
+					return; 
+				}); 
+				// end of fix
+				
+			}
+	});
+}
+
+
+function grid_extend_row(){
+	rows++;
+	prepare_grid();
+}
+function grid_extend_col(){
+	cols++;
+	prepare_grid();
+}
+function grid_reduce_col(){
+	cols--;
+	if(cols==0){cols=1;}
+	prepare_grid();
+}
+function grid_reduce_row(){
+	rows--;
+	if(rows==0){rows=1;}
+	prepare_grid();
+}
+function grid_move_to_beginning_of_set(){
+  var im = filtered_images[pointer];
+  var namepart = im.filename.split(/ ?-/).first();
+  if(namepart==im.filename){
+    namepart = im.filename.split(/[ .,_]/).first();
+  }
+
+  initial_pointer = pointer;
+  do {
+    if(pointer<=0){pointer=filtered_images.length;}
+    pointer--;
+  } while ( filtered_images[pointer].filename.search(namepart)!=-1 && pointer!=initial_pointer)
+
+  // ponechej první obrázek série jako poslední na stránce
+  pointer = pointer - cols*rows +2;
+//   J(my_grid.grid_holder).find(".image").remove();
+  my_grid.load();
+}
+function grid_move_to_end_of_set(){
+  var im = filtered_images[pointer];
+  var namepart = im.filename.split(/ ?-/).first();
+  if(namepart==im.filename){
+    namepart = im.filename.split(/[ .,_]/).first();
+  }
+
+  initial_pointer = pointer;
+  do {
+    pointer = (pointer+1) % filtered_images.length;
+  } while ( filtered_images[pointer].filename.search(namepart)!=-1 && pointer!=initial_pointer)
+
+  // ponechej poslední obrázek série jako první na stránce
+  pointer--;
+//   J(my_grid.grid_holder).find(".image").remove();
+  my_grid.load();
+}
+function grid_move_next_item(){
+	do {
+		pointer++;
+		if(pointer>=filtered_images.length){pointer = 0;}
+	} while (filtered_images[pointer]==null);
+  
+  // experimental - do not render all images again.
+  // In order to do so, move the first imagediv to the bottom, reposition imagedivs, then let load grid as usual
+  J(".images").first().append(
+    J(".images > div").first().remove()
+  );
+    // reorganize my_grid.cells
+    my_grid.cells.push( my_grid.cells.shift() );
+
+
+//   $$(".images").first().insert({bottom: J(".images > div").find(function(div){
+//     if(!div.down(".image").hasClassName("pinned")){
+//       if(div.down("video")){
+//         div.down("video").pause();
+//         div.down("video source").src="";
+//         div.down("video").load();
+//       }
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   }).remove() });
+//   reposition_imagedivs();
+  my_grid.reposition_cells();
+}
+function grid_move_prev_item(){
+	do {
+		pointer--;
+		if(pointer<0){pointer = filtered_images.length;}
+	} while (filtered_images[pointer]==null);
+
+  // experimental - do not render all images again.
+  // In order to do so, move the last imagediv to the top, reposition imagedivs, then let load grid as usual
+  J(".images").first().prepend(
+    J(".images > div").last().remove()
+  );
+    // reorganize my_grid.cells
+    my_grid.cells.unshift( my_grid.cells.pop() );
+
+//   $$(".images").first().insert({top: $$(".images > div").reverse().find(function(div){
+//     if(!div.down(".image").hasClassName("pinned")){
+//       if(div.down("video")){
+//         div.down("video").pause();
+//         div.down("video source").src="";
+//         div.down("video").load();
+//       }
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   }).remove() });
+//   reposition_imagedivs();
+  my_grid.reposition_cells();
+}
+function grid_move_next_row(){
+	pointer = pointer+cols;
+	if(pointer>filtered_images.length){
+		pointer = pointer - filtered_images.length;
+	}
+
+  // experimental - do not render all images again.
+  // In order to do so, move the first row of imagedivs to the bottom, reposition imagedivs, then let load grid as usual
+
+  for(i=0;i<cols;i++){
+    // reorganize DOM elements
+    J(".images").first().append(
+      J(".images > div").first().remove()
+    );
+    // reorganize my_grid.cells
+    my_grid.cells.push( my_grid.cells.shift() );
+  }
+//   $R(1, cols).each(function(idx){
+//     $$(".images").first().insert({bottom: $$(".images > div").find(function(div){
+//       if(!div.down(".image").hasClassName("pinned")){
+//         if(div.down("video")){
+//           div.down("video").pause();
+//           div.down("video source").src="";
+//           div.down("video").load();
+//         }
+//         return true;
+//       } else {
+//         return false;
+//       }
+//     }).remove() });
+//   });
+//   reposition_imagedivs();
+  my_grid.reposition_cells();
+}
+function grid_move_prev_row(){
+	pointer = pointer -cols;
+	if(pointer<0){
+		pointer = filtered_images.length +pointer;
+	}
+
+  // experimental - do not render all images again.
+  // In order to do so, move the first row of imagedivs to the bottom, reposition imagedivs, then let load grid as usual
+  for(i=0;i<cols;i++){
+    // reorganize DOM elements
+    J(".images").first().prepend(
+      J(".images > div").last().remove()
+    );
+    // reorganize my_grid.cells
+    my_grid.cells.unshift( my_grid.cells.pop() );
+  }
+//   $R(1, cols).each(function(idx){
+//     $$(".images").first().insert({top: $$(".images > div").reverse().find(function(div){
+//       if(!div.down(".image").hasClassName("pinned")){
+//         if(div.down("video")){
+//           div.down("video").pause();
+//           div.down("video source").src="";
+//           div.down("video").load();
+//         }
+//         return true;
+//       } else {
+//         return false;
+//       }
+//     }).remove() });
+//   });
+//   reposition_imagedivs();
+  my_grid.reposition_cells();
+}
+function grid_move_next_page(){
+  pinned_images_count = $$(".images .pinned").length;
+	pointer = pointer +rows*cols -pinned_images_count;
+	if(pointer>filtered_images.length){
+		pointer = pointer - filtered_images.length;
+	}
+  J(my_grid.grid_holder).find(".ghinda-video-player").remove();
+}
+function grid_move_prev_page(){
+  pinned_images_count = $$(".images .pinned").length;
+	pointer = pointer -rows*cols +pinned_images_count;
+	if(pointer<0){
+		pointer = filtered_images.length +pointer;
+	}
+  J(my_grid.grid_holder).find(".ghinda-video-player").remove();
+}
+function jump_to_id(){
+  id = parseInt(prompt("pointer:"));
+  if(id>=0){
+    pointer = id;
+  }
+}
+function jump_to_imageid(id){
+  if(typeof(id)==typeof(not_defined)){
+      id = parseInt(prompt("image.id:"));
+  }
+  if(id>=0){
+    var new_pointer = false;
+    counter = 0;
+    while(new_pointer===false){
+      if(filtered_images[counter].id==id){
+        new_pointer = counter;
+      } else {
+        counter++;
+        if(counter==filtered_images.length){
+          new_pointer = 0;
+        }
+      }
+    }
+    pointer = new_pointer;
+  }
+}
+
+function find_similar(){
+  labels_to_find = filtered_images[pointer].comment.split(",");
+  $$("#what_to_display input[type=checkbox]").each(function(checkbox){
+    if(labels_to_find.indexOf(checkbox.dataset.label)!=-1){
+      if(checkbox.dataset.filter=="in"){
+        checkbox.checked = true;
+      } else {
+        checkbox.checked = false;
+      }
+    } else {
+      checkbox.checked = false;
+    }
+  });
+
+  set_search_mode("AND");
+
+  btn = $("what_to_display").down(".dropdown-toggle");
+  btn.dataset.selected = labels_to_find.join("|");
+  update_dropdown_button_caption(btn);
+
+  apply_filter();
+}
+
+function find_file(filename){
+  if(!filename){
+    filename = prompt("Filename (regex):",last_find_file);
+  }
+  if(filename){
+    last_find_file = filename;
+    var orig_pointer = pointer;
+    var re = new RegExp(filename,"i");
+    // nejprve hledáme dopředu
+    if(!filtered_images.findAll(function(item,idx){return idx>pointer;}).find(function(item,idx){
+      if(item.path.search(re)!=-1){
+        pointer = (idx+1) + orig_pointer;
+        J(my_grid.grid_holder).find(".image").remove();
+          my_grid.prepare();
+          my_grid.load();
+        return true;
+      } 
+      return false;
+    })){
+      // když dopředu nic není, tak hledáme všude
+			filtered_images.find(function(item,idx){
+				if(item.path.search(re)!=-1){
+					pointer = idx;
+          J(my_grid.grid_holder).find(".image").remove();
+          my_grid.prepare();
+          my_grid.load();
+					return true;
+				} 
+				return false;
+			});
+    }
+  }
+}
+
+function load_video_bookmarks(){
+  J.getJSON(remote_fs+"video_bookmark.php?action=index",false,function(data){
+    J.each(data,function(idx,obj){
+      if(obj.image_id){
+        if(!video_bookmarks[obj.image_id]){video_bookmarks[obj.image_id] = [];}
+        video_bookmarks[obj.image_id].push(obj.pos);
+      }
+    });
+  });
+}
+function remove_video_bookmark(pointer){
+  var local_pointer = pointer;
+  var vid = J("video,object").first();
+  var image_id = vid.prop("id").replace(/yd/,"");
+
+  if( video_bookmarks[image_id]
+           && video_bookmarks[image_id].length
+           && video_bookmarks[image_id].indexOf(last_pos)!=-1
+           && pointer==last_running_pointer
+  ){
+    // the lastpos will be removed
+    index = video_bookmarks[image_id].indexOf(last_pos);
+    delete video_bookmarks[image_id][index];
+    video_bookmarks[image_id] = J.grep(video_bookmarks[image_id],function(item){return item>0;})
+    J("#yd"+image_id+"_"+index).remove();
+    remove_this_video_bookmark(image_id,last_pos);
+  }
+}
+function add_video_bookmark(pointer){
+  var local_pointer = pointer;
+  var vid = J("video,object").first();
+  var image_id = vid.prop("id").replace(/yd/,"");
+  var pos = vid.prop("currentTime");
+  if(!video_bookmarks[image_id]){video_bookmarks[image_id] = [];}
+  video_bookmarks[image_id].push(pos);
+
+  leftpos = pos/(vid.prop("duration")>0?vid.prop("duration"):1)*100;
+  vid.parents("div").find(".ghinda-video-seek").prepend(J("<span style='left:"+leftpos+"%;' id='"+(vid.prop("id")+"_"+(video_bookmarks[image_id].length-1))+"' data-cue='"+pos+"' class='cue'></span>"));
+
+  last_pos = pos;
+  last_running_pointer = local_pointer;
+  add_this_video_bookmark(image_id,pos);
+}
+function add_this_video_bookmark(image_id,pos){
+  save_this_video_bookmark(image_id,pos,"add");
+}
+function remove_this_video_bookmark(image_id,pos){
+  save_this_video_bookmark(image_id,pos,"remove");
+}
+function save_this_video_bookmark(image_id,pos,action){
+  J.getJSON(remote_fs+"video_bookmark.php?action="+action,{image_id:image_id,pos:pos},function(data){
+    if(data.result == "OK"){
+      J("#system-message").html("Bookmark "+(action=="add"?"added":(action=="remove"?"removed":action+" performed"))+".").show();
+  		setTimeout(function(){J("#system-message").hide();},3000);
+    }
+  });
+}
+
+var last_running_pointer;
+var last_pos;
+var last_inaccuracy = 0;
+var BOOKMARK_BROWSING_DIRECTION_NEXT = 1;
+var BOOKMARK_BROWSING_DIRECTION_PREVIOUS = 0;
+function go_to_next_video_bookmark(vid){
+  go_to_video_bookmark(vid,BOOKMARK_BROWSING_DIRECTION_NEXT);
+}
+function go_to_previous_video_bookmark(vid){
+  go_to_video_bookmark(vid,BOOKMARK_BROWSING_DIRECTION_PREVIOUS);
+}
+function go_to_video_bookmark(vid,direction){
+  var local_pointer = pointer;
+  var running_pointer = local_pointer;
+
+  if(!vid) vid = J("video,object").first();
+  var image_id = vid.prop("id").replace(/yd/,"");
+  var pos = vid.prop("currentTime") - last_inaccuracy;
+
+var alt_video_id = J.prop(J.grep(images,function(image){return image.old_id==image_id;}),("old_id"));
+// J.grep(images,function(image){return image.old_id==video_id;})[0].old_id;
+if(!video_bookmarks[image_id] && video_bookmarks[alt_video_id]){
+  video_bookmarks[image_id] = video_bookmarks[alt_video_id];
+}
+
+
+  // if there is a next bookmark in this file, take it
+  if(video_bookmarks[image_id] && video_bookmarks[image_id].length){
+    if(direction==BOOKMARK_BROWSING_DIRECTION_NEXT){
+      pos_in_this_file = J.grep(video_bookmarks[image_id], function(item){ return item>pos; }).min();
+    } else {
+      pos_in_this_file = J.grep(video_bookmarks[image_id], function(item){ return item<pos; }).max();
+    }
+  } else {
+    pos_in_this_file = false;
+  }
+
+  // else find another file with bookmarks set
+  if(!pos_in_this_file){
+    // iterate following images, if they have bookmarks
+
+    var get_running_pointer = function(running_pointer,direction){
+      if(direction==BOOKMARK_BROWSING_DIRECTION_NEXT){
+        running_pointer = (running_pointer+1) % filtered_images.length;
+      } else {
+        running_pointer--;
+        if(running_pointer<0){running_pointer = filtered_images.length-1;}
+      }
+      return running_pointer;
+    };
+
+    them_ids = J.map(video_bookmarks,function(item,idx){return Number(idx);})
+    running_pointer = get_running_pointer(running_pointer,direction);//(running_pointer+1) % filtered_images.length;
+
+    while(them_ids.indexOf( filtered_images[running_pointer].id )==-1){
+      running_pointer = get_running_pointer(running_pointer,direction);
+    }
+    // bookmarks found
+    if(running_pointer != local_pointer){
+      pointer = running_pointer;
+      my_grid.load();
+    }
+    if(direction==BOOKMARK_BROWSING_DIRECTION_NEXT){
+      pos_in_this_file = video_bookmarks[filtered_images[running_pointer].id].min();
+    } else {
+      pos_in_this_file = video_bookmarks[filtered_images[running_pointer].id].max();
+    }
+  }
+
+  if(pos_in_this_file == last_pos && running_pointer == last_running_pointer){
+    // the same bookmark && the same file - avoid infinited loop
+    // take increasing inaccuracy into account when jumping to bookmarks
+    last_inaccuracy = pos - pos_in_this_file + last_inaccuracy;
+    go_to_video_bookmark(vid,direction);
+    return true;
+  } else {
+    last_inaccuracy = 0;
+    last_pos = pos;//vid.prop("currentTime");// pos_in_this_file;
+    if(direction==BOOKMARK_BROWSING_DIRECTION_PREVIOUS){
+      last_pos = pos_in_this_file;
+    }
+    last_running_pointer  = running_pointer;
+  }
+  
+  // if some bookmark found, play it
+  if(!vid) vid = J("#yd"+filtered_images[running_pointer].id);
+  var jumpthere = function(){
+    if(isNaN(vid.prop("duration"))){
+      setTimeout(jumpthere,150);
+    } else {
+      offset = pos_in_this_file - vid.prop("currentTime");
+      console.log("Jumping to " + pos_in_this_file + " of " + vid.prop("duration"));
+      vid.trigger( J.Event("seek_sec",{value:parseInt(offset)}) );
+    }
+  };
+  jumpthere();
+
+}
+
+
+function get_active_video(){
+    var active_video = J(".pinned video, .pinned object");
+    if(!active_video.length){
+      active_video = J("video, object");
+    }
+    if(active_video.length){
+      active_video = active_video[0];
+    } else {
+      active_video = null;
+    }
+    return active_video;
+}
+
+
+function kb_monitor(){
+	document.body.observe("keydown",function(e){
+	  if(e.findElement("input, select")){return true;}
+
+
+    var active_video = get_active_video();
+	// e.altKey, e.shiftKey, e.ctrlKey, e.metaKey
+
+			switch(e.keyCode){
+			case Event.KEY_RIGHT:
+			  if(e.altKey){return true;}
+        if(e.ctrlKey){grid_move_to_end_of_set();return true;}
+        if(active_video && !e.shiftKey){ J(active_video).trigger( J.Event("seek_sec",{value: 5}) );  return true;}
+			  grid_move_next_item();
+				break;
+			case Event.KEY_LEFT:
+			  if(e.altKey){return true;}
+        if(e.ctrlKey){grid_move_to_beginning_of_set();return true;}
+        if(active_video && !e.shiftKey){ J(active_video).trigger( J.Event("seek_sec",{value: -5}) ); return true;}
+			  grid_move_prev_item();
+				break;
+			case Event.KEY_DOWN:
+        if(active_video && e.shiftKey){ J(active_video).trigger( J.Event("seek_sec",{value: 15}) ); return true;}
+				grid_move_next_row();
+				break;
+			case Event.KEY_UP:
+        if(active_video && e.shiftKey){ J(active_video).trigger( J.Event("seek_sec",{value: -15}) ); return true;}
+				grid_move_prev_row();
+				break;
+			case 32:
+        if(!e.altKey){
+          if(active_video){
+            if(active_video.paused){
+              active_video.play();
+            } else {
+              active_video.pause();
+            }
+            return true;
+          } else {
+            grid_move_next_page();
+          }
+        }				
+				break;
+			case Event.KEY_PAGEDOWN:
+			  if(e.ctrlKey){return true;}
+        grid_move_next_page();
+        break;
+			case Event.KEY_PAGEUP:
+			  if(e.ctrlKey){return true;}
+				grid_move_prev_page();
+				break;
+      case 107: // num +
+        if(active_video){
+          if(e.shiftKey){
+            current_playbackRate = active_video.playbackRate;
+            active_video.playbackRate = current_playbackRate * 2;
+            return true;
+          }
+          video_volume = active_video.volume;
+          video_volume = video_volume + (video_volume>=.1?.1:.01);
+          active_video.setVolume( video_volume );
+        }
+        return true;
+        break;
+      case 109: // num -
+        if(active_video){
+          if(e.shiftKey){
+            current_playbackRate = active_video.playbackRate;
+            active_video.playbackRate = current_playbackRate / 2;
+            return true;
+          }
+          video_volume = active_video.volume;
+          video_volume = video_volume - (video_volume>.1?.1:.01);
+          active_video.setVolume( video_volume );
+        }
+        return true;
+        break;
+			/*case 107: */case 102:// +, 6
+				grid_extend_col();
+				break;
+			/*case 109: */case 100: // -, 4
+				grid_reduce_col();
+				break;
+			case 104:// +, 8
+			  grid_extend_row();
+				break;
+			case 98: // -, 2
+				grid_reduce_row();
+				break;
+			case Event.KEY_TAB:
+				if($("options").visible()){return true;}
+				e.stop();
+				show_options();
+				return true;
+				break;
+			case Event.KEY_ESC:
+				hide_options();
+				J("#over").modal("hide");
+				return true;
+				break;
+      case Event.KEY_HOME: // HOME key
+        if(active_video){
+          if(e.ctrlKey){
+            step = active_video.currentTime * -1; // na začátek
+            J(active_video).trigger( J.Event("seek_sec",{value:parseInt(step)}) );
+            return false;
+          } else {
+            step = active_video.duration/20 * -1; // o 5 % vzad
+            J(active_video).trigger( J.Event("seek_sec",{value:parseInt(step)}) );
+            return false;
+          }
+        }
+        break;
+      case Event.KEY_END: // END key
+        if(active_video){
+          if(e.ctrlKey){
+            step = active_video.duration/20 * 19 - active_video.currentTime; // 5 % před konec
+            J(active_video).trigger( J.Event("seek_sec",{value:parseInt(step)}) );
+            return false;
+          } else {
+            step = active_video.duration/20; // o 5 % vpřed
+            J(active_video).trigger( J.Event("seek_sec",{value:parseInt(step)}) );
+            return false;
+          }
+        }
+        break;
+      case 190: // .
+        if(active_video && active_video.paused){
+          estimated_framerate = 29.97;
+          step = active_video.currentTime + 1/estimated_framerate; // simulate step by one frame forward
+
+//           J(active_video).trigger( J.Event("seek_sec",{value:parseInt(step)}) );
+          active_video.play();
+          active_video.currentTime = step;
+          active_video.pause();
+
+          return false;
+        }
+        break;
+      case 188: // ,
+        if(active_video && active_video.paused){
+          estimated_framerate = 29.97;
+          step = active_video.currentTime - 1/estimated_framerate; // simulate step by one frame back
+
+//           J(active_video).trigger( J.Event("seek_sec",{value:parseInt(step)}) );
+          active_video.play();
+          active_video.currentTime = step;
+          active_video.pause();
+
+          return false;
+        }
+        break;
+      case 189:
+        find_similar_ext();
+        return true;
+        break
+			case 67: // C
+			  if(e.ctrlKey){
+			    copy_labels();
+			  } else {
+			    enter_layout();
+			  }
+			  return true;
+			  break;
+			case 68: // D
+			  if(e.altKey){return true;}
+				dev();
+			  break;
+			case 69: // E
+			  show_folders_structure()
+			  e.stop();
+			  return true;
+			  break;
+			case 70: // F
+			  if(e.ctrlKey){
+			    find_file();
+			    return true;
+			  }
+        if(e.shiftKey){
+  			  if(last_find_file){
+  			    find_file(last_find_file);
+  			    e.preventDefault(); // zabránit výchozí akci prohlížeče
+  			  }
+          return true;
+        }
+			  toggle_fullscreen();
+			  return true;
+			  break;
+
+      case Event.KEY_INSERT: // INSERT key
+      case 220: // přehláska v Chromu
+      // case 222: // přehláska ve Firefoxu
+        reapply_last_label();
+        return true;
+        break;
+
+			case 222: // § v Chromu
+      case 161: // § ve Firefoxu
+			case 71: // G
+        if(!e.keyIdentifier /* tj. nejsme v Chromu, takže asi ve Firefoxu */ && e.keyCode==222){/* tj. zmáčkli jsme ¨ ve Firefoxu, takže proveď: */ reapply_last_label();return true;}
+				if(e.ctrlKey){
+					find_id();
+				  return true;
+				}
+				show_grant_label_selector();
+			  e.stop();
+			  return true;
+			  break;
+			case 72: // H
+        if(e.ctrlKey){ // search by regex
+          toggleSeriiByRegex(prompt("find group by regex:"));
+        } else { // search by current image namepart
+  			  toggleSerii(pointer);
+        }
+			  return true;
+			  break;
+			case 73: // I
+        if(!e.ctrlKey && !e.shiftKey){
+//           get_image_info(); // old
+          if(typeof(mysc)=="object"){ // scroller is shown - insert scrolled images into main course
+            mysc.insertSet();
+            return true;
+          }
+          add_video_bookmark(J(active_video).parents(".image").data().pointer);
+        }
+        if(e.shiftKey && !e.ctrlKey){
+          remove_video_bookmark(J(active_video).parents(".image").data().pointer);
+        }
+        if(e.ctrlKey && !e.shiftKey){
+          import_new_folder();
+        }
+			  return true;
+        break;
+			case 74: // J
+        if(e.ctrlKey){
+  				jump_to_imageid();
+        } else {
+  				jump_to_id();
+        }
+				break;
+			case 75: // K
+				find_similar();
+				break;
+			case 77: // M
+        if(J(".image").first().find("video").length){
+          J("video").prop("muted",true);
+        if(J("object").length){J("object").first()[0].setVolume( 0 );}
+          return true;
+        }
+			  switch_mode();
+			  return true;
+			  break;
+			case 78: // N
+				toggle_shrink();
+        toggle_preview_mode();
+				break;
+			case 79: // O
+        go_to_next_video_bookmark(J(active_video));
+        return true;
+			case 41: case 221: // ) v Chromu
+      case 169: // ) ve Firefoxu
+			  if(e.shiftKey){
+					show_starred_images();
+			  } else {
+					toggle_star();
+				}
+				return true;
+				break;
+			case 80: // P
+				toggle_presentation();
+				return true;
+				break;
+			case 82: // R
+			  if(e.ctrlKey){return true;}
+			  show_revoke_label_selector();
+			  e.stop();
+			  return true;
+			  break;
+			case 83: // S
+				toggle_slideshow();
+				return true;
+				break;
+			case 84: // T
+        if(e.shiftKey){
+          show_folders_pane();
+        }
+				toggle_folders_pane();
+				return true;
+				break;
+			case 85: // U
+        go_to_previous_video_bookmark(J(active_video));
+        return true;
+			case 86: // V
+			  if (e.ctrlKey && e.shiftKey){
+          paste_labels_to_displayed_images();
+        } else
+        if(e.ctrlKey){
+					paste_labels();
+			  } else {
+					grid_apply_layout();
+			  }
+			  return true;
+			  break;
+			case 87: // W
+			  toggle_clearview();
+			  return true;
+			  break;
+			case 88: // X
+				if(!e.ctrlKey){ // allow Ctrl+X
+					if(mysc){
+						mysc.toggle();
+					};
+					return true;
+			  }
+			  break;
+			case 113: // F2?
+        if(e.ctrlKey){
+          mass_rename_dialog();
+          return true;
+        }
+			  rename_file_dialog(pointer);
+			  return true;
+				break;
+			case 114: // F3
+			  if(last_find_file){
+			    find_file(last_find_file);
+			    e.preventDefault(); // zabránit výchozí akci prohlížeče
+			  }
+			  return true;
+				break;
+			case Event.KEY_DELETE:
+				delete_file(pointer);
+				break;
+			case 76: // L
+			  $("system-message").toggle();
+			  return true;
+			default:
+				return false;
+				break;
+			}
+			e.stop();
+			my_grid.load();
+	}); 
+}
+function hide_options(){
+	$("options").fade();
+}
+function show_options(){
+	$("options").appear();
+}
+function switch_mode(){
+	if(my_mode_switcher){
+		my_mode_switcher.switch();
+	}
+}
+function toggle_fullscreen(){
+	document.body.toggleClassName("fullscreen");
+}
+function toggle_clearview(){
+	document.body.toggleClassName("clearview");
+}
+function show_revoke_label_selector(){
+	mys = $$(".label_deselector").first(); 
+	if(mys.size<2){
+		mys.show();
+		mys.size = mys.select("option").length;
+		if(mys.size>select_max_rows){mys.size=select_max_rows;}
+		mys.multiple = true;
+		mys.focus();
+	} else {
+		mys.multiple = false;
+		mys.size = 1;
+		mys.hide();
+	}
+}
+
+function toggle_star(image){
+  if( typeof(image) == "undefined" ){
+    image = filtered_images[pointer];
+  }
+	escaped_filename = image.path.replace(/'/g,"\\\'").replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26");
+	star_indicator = $$(".images .image").first().down(".star_frame");
+	
+	if( starred[image.path] == null ){
+	  // star image
+    starred[image.path] = image;
+    set_file_properties(escaped_filename,{label:"*"});
+    image.comment = [ "*", image.comment.split(",") ].flatten().join(",");
+					star_indicator.up(".image").down(".comment").update(image.comment.split(",").collect(function(label){return "<span>"+label+"</span>";}).join(""));//.pulsate();
+					star_indicator.up(".image").down(".pointer").update(get_image_infobox(image));
+// 					populate_deselector(star_indicator.up(".image").down(".label_deselector"),image.comment);
+//           Deselector.populate.call(star_indicator.up(".image").down(".label_deselector"),image.comment);
+          star_indicator.up(".image").down(".label_deselector").populate.call(star_indicator.up(".image").down(".label_deselector"),image.comment);
+    star_indicator.addClassName("star");
+		if($("system-message").show()){
+			$("system-message").update("Starred "+pointer).show();
+			setTimeout(function(){$("system-message").hide();},3000);
+		}
+    console.log("starred "+pointer);
+  } else {
+    // un-star image
+    delete starred[image.path];
+    set_file_properties(escaped_filename,{deletelabel:"*"});
+    image.comment = image.comment.split(",").without("*").join(",");
+					star_indicator.up(".image").down(".comment").update((image.comment?image.comment.split(",").collect(function(label){return "<span>"+label+"</span>";}).join(""):""));//.pulsate();
+					star_indicator.up(".image").down(".pointer").update(get_image_infobox(image));
+// 					populate_deselector(star_indicator.up(".image").down(".label_deselector"),image.comment);
+//           Deselector.populate.call(star_indicator.up(".image").down(".label_deselector"),image.comment);
+          star_indicator.up(".image").down(".label_deselector").populate.call(star_indicator.up(".image").down(".label_deselector"),image.comment);
+    star_indicator.removeClassName("star");
+		if($("system-message").show()){
+			$("system-message").update("Unstarred "+pointer).show();
+			setTimeout(function(){$("system-message").hide();},3000);
+		}
+    console.log("unstarred "+pointer);
+  }
+  return true;
+}
+
+function show_starred_images(){
+  var html_content = new Element("div",{"class":"starred_images"});
+  var escaped_filename;
+  Object.keys(starred).each(function(imagepath){
+    image = starred[imagepath];
+  	escaped_filename = image.path.replace(/'/g,"\\\'").replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26");
+		image_src = remote_fs+"getfile.php?fullname="+(escaped_filename)
+
+	  html_content.insert(new Element("span").insert(new Element("img",{src:image_src})));
+  });
+  html_content.insert({bottom:new Element("div",{"class":"clearfix"})});
+  J("#over .modal-body").html(html_content);
+  J("#over .modal-title").text("Starred ("+Object.keys(starred).length+")");
+  J("#over .modal-dialog").addClass("modal-lg");
+	J("#over").modal("show");
+}
+
+function wipe_previous_last_labels(mys){
+  var is_first_time = true;
+  mys.select("option").each(function(option){
+    if(option.hasClassName("frequently_used")){
+      option.remove();
+      is_first_time = false;
+    }
+  });
+  return is_first_time;
+}
+
+function inject_last_labels(mys){
+  is_first_time = wipe_previous_last_labels(mys);
+  last_used_labels = last_used_labels.reverse().uniq().reverse().without(""); 
+
+  var count_of_injected_labels = 50;
+  var max = last_used_labels.length;
+  if(max < count_of_injected_labels){
+    count_of_injected_labels = max;
+  }
+  if(max>0){
+    mys.insert({top:new Element("option",{"class":"frequently_used",value:""}).update("------")});
+    $R(max - count_of_injected_labels, max-1).each(function(idx){
+      label = last_used_labels[idx];
+      mys.insert({top:new Element("option",{"class":"frequently_used",value:label}).update(label)});
+    });
+  }
+  if(is_first_time){
+    mys.selectedIndex = 0;
+  }
+}
+
+function show_grant_label_selector(selector){
+	if(typeof(selector)=="undefined"){
+	  mys = $$(".label_selector").first(); 
+	} else {
+	  mys = selector;
+	}
+	if(mys.size<2){
+    // show selector
+    inject_last_labels(mys);
+		mys.show();
+		mys.size = mys.select("option").length;
+		if(mys.size>select_max_rows){mys.size=select_max_rows;}
+		mys.multiple = true;
+		mys.focus();
+	} else {
+    // hide selector
+		mys.multiple = false;
+		mys.size = 1;
+		mys.hide();
+	}
+}
+function toggle_slideshow(){
+	if(typeof(sli)!="undefined" && sli>0){
+		slideshow_running = false;
+		clearTimeout(sli);
+		sli = null;
+		$("slideshow_info").remove();
+		document.body.removeClassName("slideshow");
+	} else {
+		slideshow_running = true;
+		document.body.addClassName("slideshow");
+		rotate();
+		document.body.insert(new Element("div",{id:"slideshow_info"}).update("Slideshow..."));
+	}
+}
+function toggle_presentation(){
+	if(typeof(pli)!="undefined" && pli>0){
+	  // turn presentation off
+		presentation_running = false;
+		clearTimeout(pli);
+		pli = null;
+		$("slideshow_info").remove();
+		document.body.removeClassName("slideshow");
+	} else {
+	  // turn presentation on
+		if(typeof(sli)!="undefined" && sli>0){
+			// but first turn off the slideshow, if needed
+			toggle_slideshow();
+		}
+		presentation_running = true;
+		advance();
+		document.body.addClassName("slideshow").addClassName("presentation");
+		document.body.insert(new Element("div",{id:"slideshow_info"}).update("Presentation..."));
+	}
+}
+function toggle_preview_mode(){
+      preview_mode = preview_mode?false:true;
+      this.blur();
+      my_grid.load();
+}
+function toggle_shrink()
+{
+	J("#images").toggleClass("shrinked");
+}
+
+function show_folders_pane(){
+	document.body.addClassName("folders-pane-visible");
+}
+function toggle_folders_pane(){
+	document.body.toggleClassName("folders-pane-visible");
+	$$(".folders_pane").first().update("").insert(new Element("div",{}).addClassName("structure2").insert(map_folders(structure)));
+}
+
+function navigate(path){
+if(debug){console.log("navigate");}
+	location.hash = path;
+	$("path").value = path;
+	load_data(path);
+	lastHash = path;
+	my_grid.load();
+}
+
+var lastHash = getHash();
+var lastPath = "";
+/**
+ * Periodical address bar checking
+ */
+// navigator = setInterval(function(){
+//   var hash = getHash();
+//   var path = hash.split("#")[0];
+// 	if(lastPath!=path){
+// 	  navigate(path);
+// 	  lastPath = path;
+// 	}
+// },100);
+
+
+
+function load_data(path, recursive){
+if(debug){console.log("load_data");}
+
+	if(!recursive){
+		last_loaded_idx = 0;
+		folders_load_queue = [];
+		folders_loaded_index = [];
+	}
+
+	// check if the path has not been loaded yet, then load and parse the structure
+	// always true when loading the very first folder (recursive == false)
+	if(folders_loaded_index.indexOf(path)==-1){
+	  folders_loaded_index.push(path);
+	
+		var folders_loaded_index_length = folders_loaded_index.length;
+		new Ajax.Request(remote_fs+"fscindex.php"+(path?"?adr="+(path.replace(/&(?!(recursive|cache))/g,"%26")):""),{
+				asynchronous:true,
+				method:"GET",
+				requestHeaders:{"Origin":"localhost"},
+				onCreate: function(response) { 
+
+					if(!(load_indicator = $("load-indicator"))){
+						document.body.insert(load_indicator = new Element("div",{id:"load-indicator","class":"load-indicator"})); 
+					}
+					if(!(folder_counter = $("folder-counter"))){
+						document.body.insert(folder_counter = new Element("div",{id:"folder-counter","class":"folder-counter"})); 
+						folder_counter.update("?");
+					} else {
+						folder_counter.show().update(folders_load_queue.length+"("+active_connections+")");
+					}
+					//load_indicator.update("<em>Loading...</em> "+path+" "+load_indicator.innerHTML).show();
+					
+					load_indicator.show();
+					if(!(folder_indicator = $("folder"+folders_loaded_index_length))){
+						load_indicator.insert({top:new Element("div",{id:"folder"+folders_loaded_index_length})});
+						folder_indicator = $("folder"+folders_loaded_index_length);
+					} else {
+						folder_indicator.show();
+					}
+					folder_indicator.update("<em>loading </em>"+path);
+				
+				// here comes the fix (for origin)
+					var t = response.transport; 
+					t.setRequestHeader = t.setRequestHeader.wrap(function(original, k, v) { 
+						if (/^(accept|accept-language|content-language)$/i.test(k)) 
+							return original(k, v); 
+						if (/^content-type$/i.test(k) && 
+							/^(application\/x-www-form-urlencoded|multipart\/form-data|text\/plain)(;.+)?$/i.test(v)) 
+							return original(k, v); 
+						return; 
+					}); 
+				}, 
+				onSuccess: function(req){
+					if(load_indicator = $("load-indicator").show()){
+						indicator = $("folder"+folders_loaded_index_length);
+						if(indicator){
+							indicator.setStyle({opacity:.6}).update("<em>processing </em>"+path);
+						}
+						//load_indicator.update("Processing ...<br />"+load_indicator.innerHTML).show(); 
+					}
+  				setTimeout(function(){load_data_process_data(req,path,recursive,folders_loaded_index_length);},1);
+				},
+				
+		});
+	}
+}
+
+function load_data_process_data(req,path,recursive,folders_loaded_index_length){
+
+				json = req.responseJSON;
+				
+// 				if(json.comments){
+// // 					if(recursive){
+// // 					  // append loaded comments
+// // 					  images = images.concat(json.files);
+// // 					} else {
+// // 						comments = json.comments;
+// // 					}
+// 					Object.keys(json.files).each(function(key){
+// 						comments[key] = json.comments[key];
+// 					});
+// 					if(folders_load_queue.length==0){
+// 					}
+// 				}
+
+				if(json.files){
+					if(recursive){
+					  // append loaded images first
+					  //images = images.concat(extend_images(json.files));
+					  images = (extend_images(json.files)).concat(images);
+					  // has to be unique
+					  //new_images = extend_images(json.files);
+					  //new_images.findAll(function(item){return ?});
+					} else {
+						images = extend_images(json.files);
+					}
+					if(folders_load_queue.length==0 && active_connections<=1 ){
+					console.log("End of load queue reached.");
+						prepare_filter();
+						prepare_filenamefilter();
+
+						my_sorter.sort(); // always refreshes filtered_images
+// 						filtered_images = filter_images(images); // no need to refresh it twice
+						if(!recursive){init_pointer();}
+						$("files_count").update("("+filtered_images.length+"&nbsp;files)");
+					} else {
+// 					  console.log("loading grid during loading subfolders...");
+// 						load_grid();
+					}
+				}
+
+				if(json.folders){
+					if(recursive){
+					  // append folders
+					  folders = folders.concat(json.folders).uniq();
+					} else {
+						folders = json.folders;
+					}
+					if(folders.length>0 && (recursive && auto_recursive) ){
+						folders.each(function(folder,idx){
+							if(folders_loaded_index.indexOf(folder)==-1 && !folders_load_queue.find(function(item){return item.folder==folder;}) && folder.search(/^.*\/\.[^\\\/]*$/)==-1 ){
+							
+// 							console.log("queuing "+folder);
+							folders_load_queue.push({folder:folder,recursive:true});
+// 								setTimeout(function(){
+// 								alert("going to load "+folder);
+// 									folders_loaded_index.push(folder);
+// 									load_data(folder, recursive=true);
+// 								},1+idx*1000);
+							}
+						});
+					}
+// 					if(folders_load_queue.length==0){
+// 						prepare_filter();
+// 						prepare_options();
+// 					}
+				}
+
+				if(load_indicator = $("load-indicator").show()){
+				  indicator = $("folder"+folders_loaded_index_length);
+				  indicator.setStyle({opacity:.3}).update("<em>done </em>" + path).fade();
+				  $("folder-counter").update(folders_load_queue.length+"("+active_connections+")");
+				  //load_indicator.update("Done. <br />Folders remaining: "+folders_load_queue.length+"<br /><br />"+load_indicator.innerHTML);
+				  if(folders_load_queue.length==0 && active_connections<=1 ){load_indicator.fade();$("folder-counter").fade();}
+				}
+
+				active_connections--;
+}
+
+var active_connections = 0;
+var max_active_connections = 1;// 5
+var folder_queue_manager = new PeriodicalExecuter(function(e){
+	if(folders_load_queue.length>0){
+		queued_req = folders_load_queue.pop();
+		if(active_connections<=max_active_connections && folders_loaded_index.indexOf(queued_req.folder)==-1 && queued_req.folder.search(/^.*\/\.[^\\\/]*$/)==-1 ){
+			console.log("loading "+queued_req.folder);
+			active_connections++;
+			load_data(queued_req.folder, recursive=queued_req.recursive);
+		}
+	}
+}, .1);
+
+function compute_rank(image){
+  return image.comment!=null?(image.comment.split(/,/).collect(function(cmt){return label_ranks[cmt]?label_ranks[cmt]:0;}).reduce(function(sum,rank){return sum+rank;},0)):0;
+}
+
+function extend_images(local_images){
+  duplicity_check = true;
+  if(local_images==null){
+		local_images = images;
+		duplicity_check = false;
+  }
+  var exts = [];
+  local_images.each(function(image,idx){
+  if(!(idx % 100)){console.log("current idx: "+idx);}
+    if(local_images[idx].comment){
+      local_images[idx].comment = local_images[idx].comment.split(",").sort().join(",");
+    } else {
+      local_images[idx].comment = "";
+    }
+
+    if(!local_images[idx].width || !local_images[idx].height){
+      local_images[idx].width = document.body.clientWidth;
+      local_images[idx].height = document.body.clientHeight;
+    }
+
+    local_images[idx].perimeter = local_images[idx].height + local_images[idx].width;
+    var bkms = video_bookmarks[local_images[idx].id];
+    local_images[idx].count_of_cues = bkms?bkms.length:0;
+
+    local_images[idx].old_id = last_loaded_idx + idx;
+		ext = image.path.replace(/^.*(\.[^.\/]+)$/,"$1");
+		local_images[idx].ext = ext;
+		if( exts.indexOf(ext) == -1 ){ exts.push(ext); }
+
+		local_images[idx].rank = compute_rank(image);
+		if(image.comment && image.comment.search(/^\*([^*]*|,.*)$/)!=-1){
+		  starred[image.path] = local_images[idx];
+		}
+	});
+  // brute force duplicity check
+//   if(duplicity_check && images.length){
+// 		local_images = local_images.findAll(function(local_item){
+// 			return !images.any(function(item){
+// 				return item.path == local_item.path;
+// 			});
+// 		});
+//   }
+  last_loaded_idx = last_loaded_idx + local_images.length;
+  filename_extensions = filename_extensions.concat(exts).uniq();
+
+  return local_images;
+}
+
+// function sort_data(key,direction){
+// if(!key) key = "mtimehash";
+//   images.sort(function(a,b){return direction=="asc"?a[key]-b[key]:b[key]-a[key];});
+//   filtered_images = filter_images(images);
+// 	load_grid();
+// }
+
+
+
+
+
+
+
+
+$("close_options").observe("click",function(e){
+if(debug){console.log("close_options");}
+		e.stop();
+		$("options").fade();
+});
+$("recursive").observe("change",function(e){
+if(debug){console.log("recursive change");}
+	path = $F("path");
+	if($F(this)=="on"){
+		// classic style => just append "&recursive=1 to address
+		if(path.indexOf("&recursive=1")==-1){
+			path = path + "&recursive=1";
+		}
+		// else use alternative style => iterate folders from browser
+//		auto_recursive = true;
+	} else {
+		path = path.replace(/^(.*)&recursive=1$/,"$1");
+		if(path.indexOf("&recursive=1")!=-1){
+			path = path + "&recursive=1";
+		}
+	}
+	this.blur();
+// 	navigate(path); // no need to fire the navigation manually, will be launched by periodical executer of href.hash
+	update_hash({path:path});
+});
+// $("path2").observe("change",function(e){
+// if(debug){console.log("path2 change");}
+// 	$("path").value = $F(e.findElement());
+// 	this.blur();
+//
+// 	var elem = document.getElementById('path'); // has to be vanilla DOM element
+// 	var event = new Event('change');
+// 	elem.dispatchEvent(event);
+// });
+
+$("path").observe("change",function(e){
+if(debug){console.log("path change");}
+		path = $F(e.findElement());
+		while(path.include("/..")){
+			path = path.replace(/\/[^\/]+\/\.\./,"");
+		}
+		this.value = path;
+		this.blur();
+		$("path").addClassName("click-through");
+		navigate(path);
+		$("options").fade();
+});
+// $("path2").observe("mousedown",function(e){
+//   $("path").removeClassName("click-through");
+// });
+document.body.observe("dblclick",function(e){
+	var firedBy = e.findElement();
+//   if(!e.findElement("select") && !e.findElement("input") && !e.findElement("button")){
+  if(["select","input","button"].indexOf(firedBy.tagName.toLowerCase())==-1){
+		if(firedBy.hasClassName("image")){
+		  rezindex_images(firedBy.up("div"));
+		}
+console.log("body click");
+		$("path").addClassName("click-through");
+  }
+});
+
+function rezindex_images(ontopdiv){
+  imagedivs = $$(".images >div").sort(function(a,b){x=parseInt(a.getStyle("z-index"));y=parseInt(b.getStyle("z-index"));if(x<y){return -1;}if(x>y){return 1;}return 0;});
+  
+  imagedivs.each(function(imagediv,idx){imagediv.setStyle({zIndex:idx+1});});
+  ontopdiv.setStyle({zIndex:imagedivs.length+2});
+}
+
+var sli;
+var slideshow_running = false;
+var presentation_running = false;
+function rotate(){
+  if(slideshow_running){
+		pointer = parseInt(filtered_images.length*Math.random());
+		div =  $$(".images .image")[parseInt(rows*cols*Math.random())]; 
+		if(si=$("slideshow_info")){si.highlight();}
+    if(div.hasClassName("pinned")){
+      // try again in a while
+      setTimeout(function(){rotate();},100);
+    } else {
+  		load_image(pointer,div);
+  		sli = setTimeout(function(){rotate();},slideshow_full_grid_interval_msec/(rows*cols/2));
+    }
+  }
+}
+function advance(){
+  if(presentation_running){
+    grid_move_next_item();
+    my_grid.load();
+		pli = setTimeout(function(){advance();},slideshow_full_grid_interval_msec/(rows*cols/2));
+  }
+}
+
+
+
+function Sorter(initial_key,initial_direction){
+
+	// private constructor
+	var __construct = function(that){
+		if(!$("sorter")){
+		  hash = getArrayHash();
+			document.body.select("#nav_main .navbar-right").first().insert({top:new Element("li",{id:"sorter","class":"fr col-sm-5"})
+				.insert(new Element("select",{id:"sortitem","class":"xi6 form-control",style:"width:40%;padding:6px 0 6px 12px;"})
+					.insert(new Element("option",{value:"mtimehash",selected:hash[7]=="mtimehash"}).update("čas změny"))
+					.insert(new Element("option",{value:"utimehash",selected:hash[7]=="utimehash"}).update("čas změny v db"))
+					.insert(new Element("option",{value:"path",selected:hash[7]=="path"}).update("název i s cestou"))
+					.insert(new Element("option",{value:"filename",selected:hash[7]=="filename"}).update("název"))
+					.insert(new Element("option",{value:"filesize",selected:hash[7]=="filesize"}).update("velikost"))
+					.insert(new Element("option",{value:"rank",selected:hash[7]=="rank"}).update("rank"))
+					.insert(new Element("option",{value:"perimeter",selected:hash[7]=="perimeter"}).update("perimeter"))
+					.insert(new Element("option",{value:"count_of_cues",selected:hash[7]=="count_of_cues"}).update("počet záložek"))
+				)
+				.insert(new Element("select",{id:"sortorder","class":"xi6 form-control",style:"width:40%;padding:6px 0 6px 12px;"})
+					.insert(new Element("option",{value:"asc",selected:hash[8]!="desc"}).update("vzestupně"))
+					.insert(new Element("option",{value:"desc",selected:hash[8]=="desc"}).update("sestupně"))
+				)
+				.insert(new Element("button",{"class":"xi6 btn btn-success",style:"width:20%;padding:6px;"}).update("sort").observe("click",function(e){
+					e.stop();
+					perform_sort.call(that,e);
+					this.blur();
+				}))
+			});
+		}
+
+
+		this.sortitem = $F("sortitem");
+		this.sortorder = $F("sortorder");
+    this.sortorderInt = this.sortorder!="asc"?-1:1;
+
+		if(debug){console.log("Sorter created.");}
+	}(this);
+	
+	this.sortMixed = function(a,b,that)
+	{
+    that.sorterMonitor++;
+    if(that.sorterMonitor % 1000 == 0){console.log(that.sorterMonitor + " items sorted.");}
+		 
+		x = String(a[that.sortitem]).toLowerCase();
+		y = String(b[that.sortitem]).toLowerCase();
+		sortorder = (that.sortorder!="asc"?-1:1);
+
+		if(x==y){
+		  // subsort by name
+		  x = b.filename;
+		  y = a.filename;
+		}
+		
+		// if either x or y is integer, perform numeric comparison
+		int_x = parseInt(x);
+		int_y = parseInt(y);
+		if(!isNaN(int_x) || !isNaN(int_y)){
+			return (int_x<int_y?-1:(int_x>int_y?1:0)) * sortorder;
+		} else {
+		// else classic textual comparison
+			return x.localeCompare(y) * sortorder;
+		}
+
+	};
+  
+  this.sortLocaleCompare = function(a,b){
+		if($("sortitem") && $("sortorder")){
+			this.sortitem = $F("sortitem");
+			this.sortorder = $F("sortorder");
+      this.sortorderInt = this.sortorder!="asc"?-1:1;
+		}
+
+    x=(a[this.sortitem]?a[this.sortitem].toLowerCase():"");
+    y=(b[this.sortitem]?b[this.sortitem].toLowerCase():"");
+		if(x==y){
+      if(this.sortitem!="filename"){
+  		  // subsort by name
+  		  x = a.filename;
+  		  y = b.filename;
+      } else {
+  		  x = a.path;
+  		  y = b.path;
+      }
+		}
+    return x.localeCompare(y) * this.sortorderInt;
+  };
+	
+	this.sortPlain = function(a,b)
+	{
+		if($("sortitem") && $("sortorder")){
+			this.sortitem = $F("sortitem");
+			this.sortorder = $F("sortorder");
+      this.sortorderInt = this.sortorder!="asc"?-1:1;
+		}
+		 
+		x = String(a[this.sortitem]).toLowerCase();
+		y = String(b[this.sortitem]).toLowerCase();
+		sortorder = (this.sortorder!="asc"?-1:1);
+console.log(this.sortitem);
+		if(x==y){
+		  // subsort by name
+		  x = b.filename;
+		  y = a.filename;
+		}
+		return (x-y) * sortorder;
+		
+		return (x<y?1:(x>y?-1:0)) * sortorder;
+
+	};
+	
+	function perform_sort(){
+	// read parameters directly from form controls, if exist
+		if(true || debug){console.log("Sorter.perform_sort");}
+		if($("sortitem") && $("sortorder")){
+			this.sortitem = $F("sortitem");
+			this.sortorder = $F("sortorder");
+      this.sortorderInt = this.sortorder!="asc"?-1:1;
+		}
+    this.sorterMonitor = 0; // reset counter
+
+// 		this.sortfunc = this.sortMixed;
+// 		this.sortfunc = this.sortPlain;
+    this.sortfunc = this.sortLocaleCompare; // sort as strings
+    if(["rank","filesize","mtimehash","utimehash","perimeter","count_of_cues"].indexOf(this.sortitem)!=-1){
+      this.sortfunc = this.sortMixed; // sort as numbers
+    }
+
+    var srtr = this; // to interact with sort function
+    images = images.sort(function(a,b){return srtr.sortfunc(a,b,srtr);});
+// 		images = images.sort(this.sortfunc);
+		this.lastSortItem = this.sortitem;
+		this.lastSortOrder = this.sortorder;
+		this.lastSortFunc = this.sortfunc;
+		console.log("images sorted: sortitem = "+this.sortitem+", sortorder = "+this.sortorder);
+// 		console.log(images.collect(function(item){return item[sortitem];}));
+
+		if(true || !boot_time){ // no boot time checking now - images are loaded always within setTimeout() | 15. 9. 2015 0:00:08
+			boot_pointer = pointer;
+			update_hash({sortitem:this.sortitem,sortorder:this.sortorder});
+			filtered_images = filter_images(images);
+			my_grid.load();
+		} else {
+		  // boot() takes care
+		}
+	}
+	
+	// public methods
+	this.sort = function(e){
+		perform_sort.call(this,e);
+	};
+
+	this.sortitem = "filename";
+	this.sortorder = "asc";
+	this.lastSortItem = "none";
+	this.lastSortOrder = "none";
+	this.lastSortFunc = "none";
+}
+
+function Switcher(initial_mode){
+  //public properties
+  this.pointer = 0;
+
+  // private properties
+  var modes = ["contain","cover","stretch"];
+  
+	// private methods
+  function getPointer(mode){
+    var pointer = modes.indexOf(mode);
+    if(pointer==-1){pointer = 0;}
+    return pointer;
+  };
+
+  function switch_mode(e){
+if(debug){console.log("Switcher.switch_mode");}
+    if($("images") && $("switcher")){
+			$("images").removeClassName(modes[this.pointer]);
+			this.pointer++;
+			if(this.pointer>=modes.length){
+				this.pointer = 0;
+			}
+			$("images").addClassName(modes[this.pointer]);
+			$("switcher").update("mode <br />" + modes[this.pointer]);
+		}
+	};
+
+  // private constructor
+  var __construct = function(that){
+		that.pointer = getPointer(initial_mode);
+		if(!$("switcher")){
+		  document.body.select("#nav_main .navbar-right").first().insert({top:new Element("div",{id:"switcher","class":"fr small col-sm-1"}).update("mode<br />"+modes[that.pointer])});
+		}
+		$("switcher").observe("click",function(e){switch_mode.call(that,e);});
+
+// 		console.log("Switcher created.");
+  }(this);
+  
+  // public methods
+  this.setMode = function(mode){
+    pointer = getPointer(mode);
+    switch_mode.call(this);
+  };
+  
+  this.switch = function(e){
+		switch_mode.call(this,e);
+	};
+}
+
+function UI(){}
+
+
+
+	function rescan_folder(path){
+		escaped_path = path.replace(/'/g,"\\\'").replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26");
+	  return window.open(remote_fs+"fscindex.php?adr="+escaped_path+"&mode=file");
+	}
+
+// enlive buttons in help pane (invoked by TAB)
+if($("shortcuts")) $("shortcuts").observe("click",function(e){
+  firedBy = e.findElement();
+  if(firedBy.id.search(/-btn$/)!=-1){
+		switch(firedBy.id.replace(/-btn$/,"")){
+			case "fullscreen":
+				toggle_fullscreen();
+				break;
+			case "slideshow":
+				toggle_slideshow();
+				break;
+			case "presentation":
+				toggle_presentation();
+				break;
+			case "switch":
+				switch_mode();
+				break;
+			case "grant":
+				show_grant_label_selector();
+				break;
+			case "revoke":
+				show_revoke_label_selector();
+				break;
+			case "add-row": grid_extend_row();my_grid.load();break;
+			case "add-col": grid_extend_col();my_grid.load();break;
+			case "del-row": grid_reduce_row();my_grid.load();break;
+			case "del-col": grid_reduce_col();my_grid.load();break;
+			case "move-next": grid_move_next_item();my_grid.load();break;
+			case "move-prev": grid_move_prev_item();my_grid.load();break;
+			case "move-next-row": grid_move_next_row();my_grid.load();break;
+			case "move-prev-row": grid_move_prev_row();my_grid.load();break;
+			case "move-next-page": grid_move_next_page();my_grid.load();break;
+			case "move-prev-page": grid_move_prev_page();my_grid.load();break;
+			case "toggle-captions": 
+				toggle_clearview();
+				break;
+			case "find-file":
+			  find_file();
+			  break;
+			case "rescan":
+				wnd = rescan_folder(lastPath);
+				break;
+		}
+  }
+});
+
+if($("menu")){$("menu").observe("click",function(e){
+				if($("options").visible()){return true;}
+				e.stop();
+				show_options();
+				return true;
+});}
+
+var label_ranks = {
+	"*":																											100,
+	"***":															4,
+	"*****":																6,
+	"bbc":-5,
+	"careful":																													20,
+	"cum in mouth":									2,
+	"cum on cheek":																	10,
+	"cum on tongue":														8,
+	"cute":														3,
+	"devotion":												3, 
+	"directly into mouth":													10, 
+	"double":													3,
+	"double tongue":									3,
+	"eye contact":									2,
+	"fitness":														5,
+	"flat belly":													5,
+	"forced":												2,
+	"glamour":											2,
+	"glasses":											2,
+	"good work":														                           16,
+	"innocence":												14,
+	"kiss":													2,
+	"kiss and facial":									24,
+	"klixen":													13,
+	"lipstick":										1,
+	"loving it":																		20, 
+	"nerdy":												2,
+	"nice licking":													6,
+	"nice riding":											4,
+	"nice stroking":										4,
+	"nice sucking":											4,
+	"nice tongue":															8,
+	"perfect body":												5,
+	"play":																	6,
+	"pornstar":										1,
+	"pure":																	6,
+	"redhead":										1,
+	"skinny":																			9,
+	"smile":																16,
+	"swallow":																			                    50, 
+	"tongue":															5, 
+	"ultimate":																			80,
+	"young":													9,
+
+  "69": 3,
+  "big dick": 3,
+  "blackhaired": 13,
+  "brunette": 3,
+  "busty": 5,
+  "butterfly": 3,
+  "cum deep": 30,
+  "dirty mind": 300,
+  "doggy": 7,
+  "gagging": 7,
+  "high class": 13,
+  "in heat": 50,
+  "irony": 200,
+  "light brunette": 3,
+  "missionary": 3,
+  "obedient": 13,
+  "orgasmic": 7,
+  "peace sign": 7,
+  "petite": 5,
+  "radiant": 50,
+  "put": 40,
+  "rough":-2000,
+  "shy": 13,
+  "shouldering": 3,
+  "sidefuck": 3,
+  "solo": 3,
+  "spooning": 3,
+  "squirt": 3,
+  "sub": 3,
+  "suspended congress": 3,
+  "tattoo": 3,
+  "titfuck": 3,
+  "trans": 3,
+  "ugly": -30,
+  "viennesse oyster": 3,
+
+  "eager": 100,
+  "touch": 50,
+  "nice balls stroking": 50,
+  "xhausted": 50,
+  "tight lips": 10,
+  "sticking tongue": 50,
+  "skilled": 50,
+  "pale": 10,
+  "nice boobs": 50,
+  "body shaking": 30,
+
+  "cock kiss"       :20,
+  "proud"           :20,
+  "dance"           :20,
+  "tiny"            :20,
+  "over tongue"     :100,
+  "photoshoot"      :-1000,
+  "pretty"          :30,
+  "sweat"           :50,
+  "trans on female" :20,
+  "guided"          :30,
+};
+
+
+function dev(){
+bounds = $("images").getDimensions();
+bound_ratio = bounds.width/bounds.height;
+w_unit = parseInt(100/(cols+1));
+h_unit = parseInt(100/(rows));
+filled_region_shape_portrait = filtered_images[pointer].width<filtered_images[pointer].height;
+  last_t = 0;
+  last_l = 0;
+  max_h = 0;total_h=0;
+  max_w = 0;total_w=0;
+console.log("bound_ratio:"+bound_ratio+", w_unit:"+w_unit+", h_unit:"+h_unit);
+$R(1,rows*cols).collect(function(idx){
+  div = $$("div.image")[idx];
+  image = filtered_images[pointer+idx-1];
+//  return [image.width,image.height];
+  return image.width/image.height;
+//  div.setStyle({height:h+"px",width:w+"px"});
+})
+//.partition(function(pair){return pair[0]>pair[1];})
+/*.each(function(ratio,idx){
+  div = $$(".image")[idx].up("div");
+    div.setStyle({border:"1px solid red",position:"static","float":"left"});
+  if(ratio>1){// na šířku
+    div.setStyle({width:(w_unit*(parseInt(ratio*2)/2))+"%",height:(h_unit*1)+"%"});
+  } else {
+    div.setStyle({width:(w_unit*1)+"%",height:(h_unit/(parseInt(ratio*2)/2))+"%"});
+  }
+})*/
+.each(function(ratio,idx){
+bounds = $("images").getDimensions();
+bound_ratio = bounds.width/bounds.height;
+w_unit = parseInt(100/(cols+1));
+h_unit = parseInt(100/(rows));
+filled_region_shape_portrait = filtered_images[pointer].width<filtered_images[pointer].height;
+  last_t = 0;last_t2=0;
+  last_l = 0;last_l2=0;
+  max_h = 0;total_h=0;
+  max_w = 0;total_w=0;
+console.log("bound_ratio:"+bound_ratio+", w_unit:"+w_unit+", h_unit:"+h_unit);
+$R(1,rows*cols).collect(function(idx){
+  div = $$("div.image")[idx];
+  image = filtered_images[pointer+idx-1];
+//  return [image.width,image.height];
+  return image.width/image.height;
+//  div.setStyle({height:h+"px",width:w+"px"});
+})
+//.partition(function(pair){return pair[0]>pair[1];})
+/*.each(function(ratio,idx){
+  div = $$(".image")[idx].up("div");
+    div.setStyle({border:"1px solid red",position:"static","float":"left"});
+  if(ratio>1){// na šířku
+    div.setStyle({width:(w_unit*(parseInt(ratio*2)/2))+"%",height:(h_unit*1)+"%"});
+  } else {
+    div.setStyle({width:(w_unit*1)+"%",height:(h_unit/(parseInt(ratio*2)/2))+"%"});
+  }
+})*/
+.each(function(ratio,idx){
+  div = $$(".image")[idx].up("div");
+  //debugger;
+    div.setStyle({border:"1px solid #333",position:"absolute","float":"none",top:"0px",left:"0px"});
+//  if(total_w/w_unit<total_h/h_unit){
+  if(last_l+last_t<last_l2+last_t2){
+addmode="right";
+    t = last_t;
+    l = last_l;
+  } else {
+addmode="bottom";
+    t = last_t2;
+    l = last_l2;
+  }
+  if(ratio>1){// na šířku
+    w = w_unit*(parseInt(ratio*2)/2);
+    h = h_unit*1;
+  } else {
+    w = w_unit*1;
+    h = h_unit/(parseInt(ratio*2)/2);
+  }
+  div.setStyle({width:(w)+"%",height:(h)+"%",top:(t)+"%",left:(l)+"%"});
+  total_w = total_w+w;
+  total_h = total_h+h;console.log("last_l:"+last_l+"("+(last_l/w_unit)+"), last_t:"+last_t+"("+(last_t/h_unit)+"), total_w:"+total_w+"("+(total_w/w_unit)+"), total_h:"+total_h+"("+(total_h/h_unit)+"), = "+(total_w+total_h)+"("+(total_w/w_unit+total_h/h_unit)+") ("+filtered_images[pointer+idx].filename+")");
+  if(max_h<h){max_h=h;}
+  if(max_w<w){max_w=w;}
+if(true || addmode=="right"){last_l = l+w;last_t = t;}
+if(true || addmode=="bottom"){last_l2 = l;last_t2 = t+h;}
+
+  if(last_l>=95){last_l=0;last_t=last_t+max_h;}
+//  if(last_t>=95){last_t=0;last_l=last_l+max_w;}
+  if(last_l2>=95){last_l2=0;last_t2=last_t2+max_h;}
+//  if(last_t2>=95){last_t2=0;last_l2=last_l2+max_w;}
+})
+.inject(0,function(acc,ratio){
+  if(ratio>1){return acc + 1*parseInt(ratio*2)/2 + 0;}
+  else {return acc + 0 + 1/parseInt(ratio*2)/2;}
+})
+;
+});
+}
+
+function Scroller(initial_speed){
+  // private constructor
+  var exec_draw;
+  var exec_scroll;
+  var element;
+  var local_pointer;
+  var w;
+
+  this.scroll_step = 5;
+  this.max_filesize = 3000000;
+  this.height = "20%";
+  this.paused = false;
+  this.tmp_data_counter = 0;
+  this.current_margin_left = 0;
+  this.namepart;
+  
+  var __construct = function(that){
+		if(!$("scroller")){
+		  that.element = new Element("div",{id:"scroller","class":"small"}).insert(new Element("div",{"class":"inner_scroller"}));
+		  that.counter_element = new Element("div",{id:"data_counter",style:"position:fixed;top:100px;left:30px;width:300px;height:40px;font-size:150%;color:red;font-weight:bold;"});
+		  that.tmp_data_counter = 0;
+		  that.local_pointer = 0;
+		  that.w = 0;
+		  document.body.insert(that.element);
+		  document.body.insert(that.counter_element);
+		  that.element.observe("mousemove",function(e){that.paused = true;});
+		  that.element.observe("mouseout",function(e){that.paused = false;});
+		  that.element.setStyle({height:that.height});
+// 		  $("images").setStyle({height:"42%",bottom:"52%"})
+		  $("images").setStyle({height:(94 - parseInt(that.height))+"%",bottom:parseInt(that.height)+"%"})
+		}
+		that.exec_draw = setInterval(function(){draw.call(that);},initial_speed?initial_speed:1000);
+		that.exec_scroll = setInterval(function(){scroll.call(that);},50);
+		$("switcher").observe("click",function(e){that.toggle.call(that,e);});
+
+		console.log("Scroller created.");
+  }(this);
+  
+  this.toggle = function(e){
+    if(e){console.log(e);}
+    this.paused = !this.paused;
+    return true;
+  }
+  function scroll(){
+    if(this.paused){return false;}
+    if(this.w<this.element.getWidth()){return false;}
+    var el = this.element.down(".inner_scroller");
+    var img = el.down("img, iframe");
+    if(!img){return false;}
+    this.current_margin_left = parseInt(el.getStyle("margin-left"));
+    this.current_margin_left = this.current_margin_left-this.scroll_step;
+    el.setStyle({marginLeft:this.current_margin_left+"px"});
+  }
+
+  function draw(){
+//     dt = new Date();
+//     $(this.element).update(dt.toString());//.highlight();
+    
+		var scrolled_images;
+// 		if(starred.length>3){
+		if(starred.length){
+			scrolled_images = starred;
+		} else {
+			scrolled_images = filtered_images;
+		}
+    
+    container_width = this.element.getWidth();
+    container_height = this.element.getHeight();
+
+    // remove passed images
+    el = this.element.down(".inner_scroller");1
+    img = el.down("img, iframe, video");
+    fix_width = (img?img.getWidth():0) + this.current_margin_left;
+    if(fix_width<0 && img){
+      // image can be removed, not visible
+      img.stopObserving();
+      img.remove();
+      el.setStyle({marginLeft:fix_width+"px"});
+      this.w = this.w + this.current_margin_left - fix_width;
+    }
+
+    // add new images
+    if(scrolled_images.length && this.w<=(container_width+container_height*2)){
+      
+      if(this.local_pointer>=scrolled_images.length){
+        this.local_pointer = 0;
+      }
+      
+      image = scrolled_images[this.local_pointer];
+// 			// skip large images to avoid glitches
+// 			while(image.filesize>this.max_filesize){
+// 				this.local_pointer++;
+// 				if(this.local_pointer>=scrolled_images.length){
+//           if(scrolled_images.length==1){
+//             // just one image and is larger than limit -> avoid infinite loop
+// //             alert("Just one image found, which is above filesize limit to display in scroller ("+this.max_filesize+").");
+//             return false;
+//           }
+// 					this.local_pointer = 0;
+// 				}
+// 				image = scrolled_images[this.local_pointer];
+// 			}
+
+      if(image){
+
+				escaped_filename = image.path.replace(/'/g,"\\\'").replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26");
+
+        // thumb large images to avoid glitches
+        if(image.filesize>this.max_filesize){
+          escaped_filename = escaped_filename+"?mode=preview";
+        }
+
+// 				image_src = remote_fs+"getfile.php?fullname="+(escaped_filename)
+				image_src = remote_fs+"d/"+(escaped_filename).replace(/^.*\/Downloads\//,"");
+
+				// set proper width to get the same height
+        new_w = (image.width*container_height/image.height);
+
+        if([".webm",".mp4",".avi",".mkv",".mov"].indexOf(image.ext)!=-1){
+          image_element = new Element("video",{"data-id":image.id,title:image.filename,style:"display:inline;vertical-align:top;position:relative;height:"+container_height+"px;width:"+new_w+"px;",controls:true,autoplay:true,muted:true,loop:true,poster:"/mapdrive/images/warning.png"}).insert(
+            new Element("source",{src:image_src,type:"video/"+image.ext.replace(/^\./,"")})
+          );
+        } else if([".flv"].indexOf(image.ext)!=-1) {
+          if(!myListeners[image.id]){myListeners[image.id] = new Listener(image.id, onInitFunction = function(){
+            var video_element = J("#yyd"+image.id);
+            if(video_element.length){
+              video_player = video_element.gVideo({listener:myListeners[div_index]});
+              video_element[0].SetVariable("method:setUrl", image_src);
+              if(!preview_mode){
+                video_element[0].SetVariable("method:play", "");
+              }
+              video_player[0].setVolume(video_volume);
+
+              video_element.css({height: (parseInt(video_element.css("height"))-100)+"px"});
+              new_width = parseInt( parseInt(video_element.css("height")) *16/9 / parseInt(video_element.css("width"))*100 );
+              if(new_width>100){
+                new_width = 100;
+              }
+              video_element.css({width: new_width+"%" });
+            }
+          });}
+          image_element = new Element("object",{id:"yyd"+image.id,"data-id":image.id,type:"application/x-shockwave-flash",data:"/player_flv_js.swf",width:new_w,height:container_height})
+            .insert(new Element("param",{name:"movie",value:"/player_flv_js.swf"}))
+            .insert(new Element("param",{name:"FlashVars",value:"listener=myListeners["+image.id+"]&amp;interval=500&amp;useHandCursor=0&amp;bgcolor=000000&amp;buffer=9"}));
+        } else {
+          image_element = new Element("img",{"data-id":image.id,title:image.filename,src:image_src,style:"display:inline;vertical-align:top;position:relative;height:"+container_height+"px;width:"+new_w+"px;"});
+        }
+
+				this.element.down(".inner_scroller")
+          .insert(image_element.observe("click",function(e){
+  				  if(my_grid){
+  						id = e.findElement().dataset.id;
+  						image_pointer = 0;
+  						filtered_images.find(function(image,idx){if(image.id==id){image_pointer = idx;return true;}})
+  						pointer = image_pointer;
+  						my_grid.load();
+  				  }
+				  }));
+// using iframes
+// 				this.element.down(".inner_scroller").insert(new Element("iframe",{src:image_src.replace("getfile.php","getfile-wrapper.php")+"&h="+container_height+"&w="+new_w+"",style:"position:relative;height:"+container_height+"px;width:"+new_w+"px;"}));
+				this.tmp_data_counter = this.tmp_data_counter + image.filesize;
+        data_counter_html = String(this.tmp_data_counter).replace(/(\d{1,3}|\G\d{3})(?=(?:\d{3})+(?!\d))/g,"$1 ");
+        data_counter_html+= "<br />'"+(this.namepart?this.namepart:"no namepart set")+"': " +scrolled_images.length+ " found.<br /><span class='small'>press 'I' to inject to main course</span>";
+				$("data_counter").update(data_counter_html);
+				this.w = this.w + new_w;
+				this.local_pointer++;
+      }
+     
+    }
+  }
+
+  /**
+   * Insert images being scrolled into filtered_images array, just after current image
+   */
+  this.insertSet = function(){
+    if(starred.length){
+      filtered_images.splice(pointer+1, 0, starred);
+      filtered_images = filtered_images.flatten();
+      my_grid.load();
+    }
+  }
+  
+  /**
+   * Cleanup
+   */
+  this.destroy = function(){
+    clearInterval(this.exec_draw);
+    clearInterval(this.exec_scroll);
+    this.element.remove();
+    if(el = $("data_counter")){el.remove();}
+//     $("images").setStyle({height:"94%",bottom:"0%"})
+    $("images").setStyle({height:"",bottom:""})
+  }
+}  
+
+function toggleSeriiByRegex(regex){
+  if(typeof(mysc)=="object"){
+    mysc.destroy();
+    delete mysc;
+  }
+  var re = new RegExp(regex,"i");
+  starred = images.findAll(function(item,idx){
+  	if(item.path.search(re)!=-1 || item.comment.search(re)!=-1){
+  		return true;
+  	}
+  	return false;
+  });
+  mysc = new Scroller();
+  mysc.namepart = regex;
+}
+
+function toggleSerii(local_pointer){
+  if(local_pointer=="null"){
+    local_pointer = pointer;
+  }
+  if(typeof(mysc)=="object"){
+    mysc.destroy();
+    delete mysc;
+  } else {
+    im = filtered_images[local_pointer];
+    is_series = im.comment.split(",").indexOf("series")!=-1;
+    namepart = im.filename.split(/ ?-/).first();
+      if(namepart==im.filename){
+        namepart = im.filename.split(/[ .,_]/).first();
+      }
+
+    starred /*global*/ = images.findAll(function(image){
+      return image.filename.toLowerCase().search(namepart.toLowerCase())!=-1;
+    });
+    if(starred.length>100){
+      if(!prompt("Více než 100 výsledků. Pokračovat?")){return false;}
+    }
+  
+    mysc = new Scroller();
+    mysc.namepart = namepart;
+  }
+}
+
+var myx;
+function init_image_size_normalizer(){return false;
+	myx = setInterval(normalize,1000);
+}
+  function normalize(){
+		if(filtered_images.length>1){
+			imagedivs = $$(".images >div");
+      count_of_images_to_skip = 0;
+			$R(1,rows).each(function(row){
+
+				// select proper image frames
+				row_imagedivs = $R(1,cols).collect(function(col){
+					return imagedivs[col+((row-1)*cols)-1];
+				});
+
+// 				imw = $R(1,cols).collect(function(idx){
+				imw = row_imagedivs.collect(function(imagediv,idx){
+// 					im = filtered_images[(pointer + idx + (row-1)*cols - 1)%filtered_images.length]; 
+					im = filtered_images[imagediv.down(".image").dataset.pointer]; 
+					return im.width*100/im.height;
+				}).reduce( function(total, num){ return total + num }, 0);
+//         console.log("imw: "+imw);
+				
+//         // fix row width by pinned images
+//         count_of_images_to_skip = 0;
+//         row_imagedivs.each(function(imagediv,idx){
+//           if(imagediv.down(".image").hasClassName("pinned")){
+//   					im = filtered_images[(pointer + idx + (row-1)*cols)%filtered_images.length];
+//             imw = imw - im.width*100/im.height;
+//   					pinned_im = filtered_images[imagediv.down(".image").dataset.pointer];
+//             imw = imw + pinned_im.width*100/pinned_im.height;
+//             count_of_images_to_skip++;
+//           }
+//         });
+//         console.log("imw fixed: "+imw);
+				// set image widths
+				ims = row_imagedivs.collect(function(imagediv,idx){
+          if(imagediv.down(".image").hasClassName("pinned")){
+  					im = filtered_images[imagediv.down(".image").dataset.pointer];
+            count_of_images_to_skip++;
+          } else {
+					  im = filtered_images[(pointer + idx - count_of_images_to_skip + (row-1)*cols)%filtered_images.length];
+          }
+					w = (100*im.width/imw*100/im.height);
+					imagediv.setStyle({width:w+"%"});
+					return w;
+				});
+				
+				// distribute position
+				row_imagedivs.inject(0,function(acc,imagediv,idx){
+					if( idx==0 ){
+						l = 0;
+					} else {
+						l = ims[idx-1];
+					}
+					acc = acc + l;
+					imagediv.setStyle( { left: acc+"%" } );
+					return acc;
+				});
+				
+			});
+		}
+		
+	}
+
+
+</script>
+    <script type="text/javascript">
+      function update_dropdown_button_caption(btn){
+          selected_labels = btn.dataset.selected.split("|").without("");
+          // update button text
+          if(selected_labels.length>3){
+            btn.update(selected_labels.length + " labels");
+          } else 
+          if(selected_labels.length>0){
+            btn.update(selected_labels.join(", "));
+          } else {
+            btn.update("- vše -");
+          }
+          btn.insert({bottom:new Element("span",{style:"padding-left:3px;"}).addClassName("caret")});
+
+      }
+      
+      $$(".dropdown-menu").invoke("observe","change",function(e){
+        if(firedBy = e.findElement("input[type=checkbox]")){
+          btn = firedBy.up(".dropdown").down(".dropdown-toggle");
+          
+          // remember selected labels in button dataset
+          if(firedBy.dataset.filter=="in"){
+            if(firedBy.checked){
+              btn.dataset.selected = [btn.dataset.selected.split("|"),firedBy.dataset.label].flatten().without("").uniq().join("|");
+            } else {
+              if(btn.dataset.selected.indexOf(firedBy.dataset.label)!=-1){
+                btn.dataset.selected = btn.dataset.selected.split("|").without(firedBy.dataset.label).join("|");
+              }
+            }
+          }
+          update_dropdown_button_caption(btn);
+          if(btn.id=="dropdownMenu1"){
+            update_hash({labels:btn.dataset.selected});
+          } else if(btn.id=="dropdownExts"){
+            update_hash({exts:btn.dataset.selected});
+          }
+
+//           search_mode = "OR";
+//           if((search_mode_radios = $$("input[name=search_mode]")).length){
+//             search_mode = search_mode_radios.find(function(radio){return radio.checked;}).value;
+//           }
+//           update_hash({search_mode:search_mode});
+    
+          // search immediately:
+          setTimeout(function(){apply_filter();},1);
+        }
+        
+        // remember search_mode
+        if(firedBy = e.findElement("input[type=radio][name=search_mode]")){
+          if(firedBy.checked){
+            update_hash({search_mode:firedBy.value});
+          }
+          // search immediately:
+          setTimeout(function(){apply_filter();},1);
+        }
+        if(firedBy = e.findElement("input[type=radio][name=search_mode_ext]")){
+          if(firedBy.checked){
+            update_hash({search_mode_ext:firedBy.value});
+          }
+          // search immediately:
+          setTimeout(function(){apply_filter();},1);
+        }
+      });
+      $$(".dropdown-menu").invoke("observe","click",function(e){
+//       console.log(e.findElement());
+        e.stopPropagation();
+      });
+      $$(".dropdown-menu button[role=select-all]").invoke("observe","click",function(e){
+        e.stop();
+        btn = e.findElement().up(".dropdown").down(".dropdown-toggle");
+        e.findElement().up(".dropdown-menu").select("input[type=checkbox][data-filter=in]").each(function(input){
+          input.checked = true;
+          btn.dataset.selected = [btn.dataset.selected.split("|"),input.dataset.label].flatten().without("").uniq().join("|");
+        });
+        update_dropdown_button_caption(btn);
+      });
+      $$(".dropdown-menu button[role=deny-all]").invoke("observe","click",function(e){
+        e.stop();
+        btn = e.findElement().up(".dropdown").down(".dropdown-toggle");
+        e.findElement().up(".dropdown-menu").select("input[type=checkbox][data-filter=out]").each(function(input){
+          input.checked = true;
+          btn.dataset.selected = btn.dataset.selected.split("|").without(input.dataset.label).uniq().join("|");
+        });
+        update_dropdown_button_caption(btn);
+      });
+      $$(".dropdown-menu button[role=select-none]").invoke("observe","click",function(e){
+        e.stop();
+        btn = e.findElement().up(".dropdown").down(".dropdown-toggle");
+        e.findElement().up(".dropdown-menu").select("input[type=checkbox]").each(function(input){
+          if(input.dataset.label=="hide" && input.dataset.filter=="out"){
+            input.checked = true;
+          } else {
+            input.checked = false;
+          }
+        });
+        btn.dataset.selected = [];
+        update_dropdown_button_caption(btn);
+      });
+      J("#what_to_display .dropdown").on("show.bs.dropdown",function(){
+        ddwn = $$("#what_to_display .dropdown-menu").first();
+        ddwn.setStyle({height:($("images").getHeight()*0.7)+"px"});
+//         ddwn.update("");
+//         ddwn.insert(new Element("button",{type:"button"}).update("Vše").observe("click",function(e){e.stop();e.findElement().up(".dropdown-menu").select("input[type=checkbox]").each(function(input){input.checked = true;});}));
+//         ddwn.insert(new Element("button",{type:"button"}).update("Nic").observe("click",function(e){e.stop();e.findElement().up(".dropdown-menu").select("input[type=checkbox]").each(function(input){input.checked = false;});}));
+//         ddwn.insert(new Element("input",{type:"radio", name:"search_mode", id:"search_modeAND", value:"AND"}))
+//             .insert(new Element("label",{for:"search_modeAND"}).update("AND"))
+//             .insert(new Element("input",{type:"radio", name:"search_mode", id:"search_modeOR", value:"OR", checked:true}))
+//             .insert(new Element("label",{for:"search_modeOR"}).update("OR"));
+        labels.each(function(comment){
+          safecomment = escape(comment).replace(/%/g,"").replace(/[*]/g,"-");
+//           if(!ddwn.down("#lbl_"+safecomment)){
+          if(!ddwn.down("input[id=lbl_"+safecomment+"]")){
+            ddwn.insert(one_label(comment));
+          }
+        });
+      });
+      J("#exts_to_display .dropdown").on("show.bs.dropdown",function(){
+        ddwn = $$("#exts_to_display .dropdown-menu").first();
+        ddwn.setStyle({height:($("images").getHeight()*0.7)+"px"});
+        exts.each(function(comment){
+          safecomment = escape(comment).replace(/%/g,"").replace(/[*]/g,"-");
+          if(!ddwn.down("input[id=lbl_"+safecomment+"]")){
+            ddwn.insert(one_label(comment));
+          }
+        });
+      });
+
+      J("#what_to_display .dropdown, #exts_to_display .dropdown").on("hide.bs.dropdown",function(){
+        apply_filter();
+      });
+
+function one_label(comment,checked){
+  safecomment = escape(comment).replace(/%/g,"").replace(/[*]/g,"-");
+  
+  return new Element("li")
+    .insert(new Element("a")
+      .insert(new Element("span",{"class":"checkbox"})
+        .insert(new Element("input",{id:"lbl_"+safecomment,type:"checkbox","data-label":comment,"data-filter":"in",checked:checked==true}))
+        .insert(new Element("span",{"class":"checkbox_indicator"}))
+        .insert(new Element("span",{}).addClassName("red_bg")
+          .insert(new Element("input",{id:"deny_lbl_"+safecomment,type:"checkbox","data-label":comment,"data-filter":"out"}))
+          .insert(new Element("span",{"class":"checkbox_indicator"}))
+        )                      
+        .insert(new Element("label",{for:"lbl_"+safecomment}).update(comment))
+      )
+    );
+
+}
+
+// (
+function thumb_images(from){
+
+  var ind = $("load-indicator").show();
+  var loop = function(){
+    image = images[current_idx];
+    escaped_filename = image.path.replace(/'/g,"\\\'").replace(/\+/g,"%2B").replace(/#/g,"%23").replace(/&(?!recursive)/g,"%26"); //'
+    new Ajax.Request(remote_fs+"getfile.php?fullname="+escaped_filename+"&mode=preview",{
+      //asynchronous:false,
+      onSuccess:function(req){
+        ind.update(current_idx+" z " + max + " finished. Length: "+image.filesize+(current_idx<max?"<br>now processing id "+(current_idx+1)+" with length "+images[current_idx+1].filesize:""));
+
+        current_idx++;
+        if(current_idx<max){
+          setTimeout(loop,1);
+        }
+      }
+    });
+  };
+  var current_idx = from; // 0
+  var max = images.length;//from + 20;
+  
+  loop();
+
+
+}
+// )(1304)
+
+function import_new_folder(){
+  J("#over .modal-title").html("Import");
+  J("#over .modal-body").html("");
+  J("#over .modal-dialog").addClass("modal-lg");
+  J("#over").modal();  
+  
+  new Ajax.Request(remote_fs+"import.php",{
+    onComplete: function(req){
+      html = req.responseText;
+      J("#over .modal-body").html(html);
+    }
+  });
+}
+
+
+function find_similar_ext(){
+howmany = prompt("How many images at minimum?",typeof(howmany)!="undefined"?howmany:cols*rows);
+if(typeof(_cached)!="object"){_cached = {};}
+time_begin = new Date();
+_labels = shuffleArray(filtered_images[pointer].comment.split(",").without("photoshoot"));
+imagelabels = images.without("").findAll(function(image){return image.comment.split(",").any(function(label){return _labels.indexOf(label)!=-1;}); }).collect(function(image){return image.comment.split(",");});
+
+if(evalArray(_labels)>=howmany){ return filter_by_labels_array(_labels);}
+
+growing_labels = [];
+for(y=0;y<_labels.length;y++){
+mymax=0;
+myx = null;
+for(x=0;x<_labels.length;x++){
+ if(growing_labels.indexOf(_labels[x])==-1){
+  labels = [growing_labels,_labels[x]].flatten();
+  val = evalArray(labels);
+  console.log("evaluated "+labels.join(",")+": ",val);
+  if(val>=howmany && mymax<=val){if(mymax==val && parseInt(Math.random()*2)){} mymax=val;myx = _labels[x];}
+ }
+}
+if(myx && growing_labels.indexOf(myx)==-1){
+ growing_labels.push(myx);
+ imagelabels = imagelabels.findAll(function(labels){return labels.indexOf(myx)!=-1; });
+}else{break;}
+}
+console.log("winner:",mymax,growing_labels);
+filter_by_labels_array(growing_labels);
+
+time_end = new Date();
+console.log("Duration", (time_end - time_begin)/1000, "sec" );
+
+function filter_by_labels_array(labels){
+ J.each(J("#what_to_display input[data-filter=in]"),function(idx){if(labels.indexOf(this.dataset.label)!=-1){this.checked = true;}else{this.checked=false;}});
+ btn = J("#what_to_display .dropdown-toggle")[0];
+ btn.dataset.selected = labels.join("|");
+ update_dropdown_button_caption(btn);
+ apply_filter();
+}
+
+function evalArray(labels){
+ if(typeof(_cached)=="object" && _cached[labels]){return _cached[labels];}
+ found = imagelabels.findAll(function(comment){return labels.all(function(label){return comment.indexOf(label)!=-1;}); });
+ _cached[labels] = found.length;
+ return found.length;
+}
+}
+
+/**
+ * Randomize array element order in-place.
+ * Using Durstenfeld shuffle algorithm.
+ */
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
+
+var seek_back_pending = false;
+var last_seek_result_time;
+var last_seek_offset;
+var last_seek_time;
+
+J.fn.gVideo = function(options) {
+	// build main options before element iteration
+	var defaults = {
+		theme: 'simpledark',
+		childtheme: ''
+	};
+	var options = J.extend(defaults, options);
+	// iterate and reformat each matched element
+	return this.each(function() {
+		var $gVideo = J(this);
+
+		//create html structure
+		//main wrapper
+// 		var $video_wrap = J('<div></div>').addClass('ghinda-video-player').addClass(options.theme).addClass(options.childtheme);
+// pre-wrapped:
+		var $video_wrap = J($gVideo.parents(".ghinda-video-player")).addClass('ghinda-video-player').addClass(options.theme).addClass(options.childtheme);
+		//controls wraper
+		var $video_controls = J('<div class="ghinda-video-controls"><a class="ghinda-video-play" title="Play/Pause"></a><div class="ghinda-video-seek"><div class="ghinda-video-loaded"></div></div><div class="ghinda-video-progress text-def"></div><div class="ghinda-video-timer text-def">00:00</div><div class="ghinda-volume-box"><div class="ghinda-volume-slider"></div><a class="ghinda-volume-button" title="Mute/Unmute"><span class="glyphicon glyphicon-volume-up"></span></a></div></div>');
+// 		$gVideo.wrap($video_wrap);
+		$gVideo.after($video_controls);
+
+//get newly created elements
+var $video_container = $gVideo.parent('.ghinda-video-player');
+var $video_controls = J('.ghinda-video-controls', $video_container);
+var $ghinda_play_btn = J('.ghinda-video-play', $video_container);
+var $ghinda_video_seek = J('.ghinda-video-seek', $video_container);
+var $ghinda_video_timer = J('.ghinda-video-timer', $video_container);
+var $ghinda_video_progress = J('.ghinda-video-progress', $video_container);
+var $ghinda_video_loaded = J('.ghinda-video-loaded', $video_container);
+var $ghinda_volume = J('.ghinda-volume-slider', $video_container);
+var $ghinda_volume_btn = J('.ghinda-volume-button', $video_container);
+
+
+// $video_controls.hide(); // keep the controls hidden
+
+if(options.listener){
+  // FLV video with listener
+  // create interface:
+  $gVideo[0].play  = function(){ $gVideo[0].SetVariable("method:play",""); };
+  $gVideo[0].pause = function(){ $gVideo[0].SetVariable("method:pause",""); };
+  $gVideo[0].stop  = function(){ $gVideo[0].SetVariable("method:stop",""); };
+}
+
+var gPlay = function() {
+	if($gVideo.prop('paused') == false) {
+		$gVideo[0].pause();
+	} else {
+		$gVideo[0].play();
+	}
+};
+
+$ghinda_play_btn.click(gPlay);
+$gVideo.click(gPlay);
+
+$gVideo.bind('play', function() {
+	$ghinda_play_btn.addClass('ghinda-paused-button');
+});
+
+$gVideo.bind('pause', function() {
+	$ghinda_play_btn.removeClass('ghinda-paused-button');
+});
+
+$gVideo.bind('ended', function() {
+	$ghinda_play_btn.removeClass('ghinda-paused-button');
+});
+
+var video_id = $gVideo.prop("id").replace(/yd/,"");
+var alt_video_id = J.prop(J.grep(images,function(image){return image.old_id==video_id;}),("old_id"));
+if(video_bookmarks[video_id] || video_bookmarks[alt_video_id]){
+  if(!video_bookmarks[video_id]){video_bookmarks[video_id] = video_bookmarks[alt_video_id];}
+  J.each(video_bookmarks[video_id],function(bk,val){
+   cueid = "yd" + video_id + "_" + bk;
+   if(!J(cueid).length){
+    $video_container.find(".ghinda-video-seek").prepend(J("<span style='display:none;' id='"+cueid+"' data-cue='"+val+"' class='cue'></span>"));
+   }
+  });
+}
+var placeCues = function(){
+  cues = $ghinda_video_seek.find(".cue");
+  var bkms = video_bookmarks[$gVideo.prop("id").replace(/yd/,"")];
+
+  if(bkms && bkms.length==cues.length){
+    J.each(cues,function(index, cue){
+      leftpos = cue.dataset.cue/($gVideo.prop("duration")>0?$gVideo.prop("duration"):1)*100;
+      J(cue).css({left:leftpos+"%",display:""});
+    });
+  }
+
+}
+
+var seeksliding = false;
+var createSeek = function() {
+	if($gVideo.prop('readyState')) {
+		var video_duration = $gVideo.prop('duration');
+		$ghinda_video_seek.slider({
+			value: 0,
+			step: 0.01,
+			orientation: "horizontal",
+			range: "min",
+			max: video_duration,
+			animate: true,
+			slide: function(){
+				seeksliding = true;
+			},
+			stop:function(e,ui){
+				seeksliding = false;
+// 				$gVideo.prop("currentTime",ui.value);
+
+
+        if(options.listener){
+          // FLV player
+          $gVideo.prop("currentTime", ui.value);
+          $gVideo[0].SetVariable("method:setPosition", ui.value*1000);
+        } else {
+          $gVideo.prop("currentTime", ui.value);
+        }
+
+
+			}
+		});
+    placeCues();
+		$video_controls.show();
+	} else {
+		setTimeout(createSeek, 150);
+	}
+};
+
+createSeek();
+
+
+var gTimeFormat=function(seconds){
+	var m=Math.floor(seconds/60)<10?"0"+Math.floor(seconds/60):Math.floor(seconds/60);
+	var s=Math.floor(seconds-(m*60))<10?"0"+Math.floor(seconds-(m*60)):Math.floor(seconds-(m*60));
+	return m+":"+s;
+};
+
+var seekUpdate = function() {
+  var currenttime = $gVideo.prop('currentTime');
+  var duration = $gVideo.prop("duration");
+  var video_speed = $gVideo.prop("playbackRate");
+  if(!seeksliding && $ghinda_video_seek.slider("instance")) {
+    $ghinda_video_seek.slider('value', currenttime);
+    if(options.listener){
+      // display amount of data loaded so far
+      if(options.listener.bytesLoaded < options.listener.bytesTotal){
+        $ghinda_video_loaded.css("width", parseInt((options.listener.bytesLoaded/options.listener.bytesTotal)*100)+"%" );
+      } else {
+        $ghinda_video_loaded.css("width", "100%" );
+//         $ghinda_video_loaded.hide();
+      }
+    }
+  }
+  $ghinda_video_timer.text(gTimeFormat(currenttime) + " / - " + gTimeFormat(duration - currenttime) + " / " + gTimeFormat(duration) + " @ " + video_speed + "x");
+  $ghinda_video_progress.text(parseInt(currenttime/(duration?duration:1)*100));
+  J("#system-log").html("GLOBAL VOLUME: "+(parseInt(video_volume*100))+" %");
+};
+
+$gVideo.bind('timeupdate', seekUpdate);
+
+var seekToTime = function( e )
+{
+    var time_to_seek = $gVideo.prop("currentTime") + e.value;
+    if( time_to_seek < 0 ) {
+      time_to_seek = 0;
+    }
+    last_seek_offset = e.value;
+    last_seek_time   = time_to_seek;
+
+    if( time_to_seek > $gVideo.prop("duration") )
+        return;
+
+    if(options.listener){
+      // FLV player
+      if(e.value<0){seek_back_pending = true;} // check result time of this jump. If it will be the same, it is not possible seek back by five seconds only. Immediately repeat going back then.
+      $gVideo.prop("currentTime", time_to_seek);
+      $gVideo[0].SetVariable("method:setPosition", time_to_seek*1000);
+    } else {
+      $gVideo.prop("currentTime", time_to_seek);
+    }
+    if(typeof(mydebug)=="function"){mydebug(e, $gVideo, options);}
+};
+$gVideo.bind("seek_sec",seekToTime);
+
+var afterSeek = function( e ){
+//   if(){
+//   }
+}
+
+$gVideo[0].setVolume = function(value){
+  $gVideo.prop("muted", false);
+  if(value>1){value = 1;}
+  if(value<0){value = 0;}
+  video_volume = value;
+  $gVideo.prop("volume", value);
+  $ghinda_volume.slider("value",value);
+
+  if(options.listener){
+    // FLV object
+    $gVideo[0].SetVariable("method:setVolume", value*100);
+  }
+}
+
+$ghinda_volume.slider({
+	value: 1,
+	orientation: "vertical",
+	range: "min",
+	max: 1,
+	step: 0.05,
+	animate: true,
+	slide:function(e,ui){
+		$gVideo.prop('muted',false);
+		video_volume = ui.value;
+		$gVideo.prop('volume',ui.value);
+    $gVideo[0].setVolume(ui.value);
+
+	}
+});
+
+var muteVolume = function() {
+	if($gVideo.prop('muted')==true) {
+		$gVideo.prop('muted', false);
+		$ghinda_volume.slider('value', video_volume);
+
+		$ghinda_volume_btn.removeClass('ghinda-volume-mute');
+	} else {
+		$gVideo.prop('muted', true);
+		$ghinda_volume.slider('value', '0');
+
+		$ghinda_volume_btn.addClass('ghinda-volume-mute');
+	};
+};
+
+$ghinda_volume_btn.click(muteVolume);
+
+$gVideo[0].flvVolume = $ghinda_volume; // make it public
+
+$gVideo.removeAttr('controls');
+
+return $gVideo;
+});
+}
+    </script>
+ <script type="text/javascript">
+            //<![CDATA[
+  var myListeners = {};
+  var listenerIndex = 0;
+
+
+  function Listener(idx,onInitFunction){
+
+    var __construct = function(that){
+//       if(myListeners[idx]){return myListeners[idx];}
+  		create.call(that);
+  		console.log("Listener "+idx+" created.");
+    }(this);
+
+    function create(){
+//       this.inited = false;
+//       this.onClick = function(){};
+//       this.onFinished = function()
+//                 {
+//                     console.log("FLV finished");
+//                     stop();play();
+//                 };
+//       this.onUpdate = function(){};
+    }
+
+
+
+                this.inited = false;
+                this.element = null;
+
+                /**
+                 * Initialisation
+                 */
+                this.onInit = function()
+                {
+//                   this.element = J(".image")[idx];
+                  this.element = J("#yd"+idx).parents(".image")[0];
+                  if(!this.inited && typeof(onInitFunction)=="function"){
+                    // perform init function only once
+                    onInitFunction();
+                  }
+                  this.inited = true;
+                };
+                /**
+                 * onClick event on the video
+                 */
+                this.onClick = function()
+                {
+                    J(this.element).trigger({type:"click"});
+//                     var total = document.getElementById("info_click").innerHTML;
+//                     document.getElementById("info_click").innerHTML = Number(total)+1;
+                };
+                /**
+                 * onKeyUp event on the video
+                 */
+                this.onKeyUp = function(pKey)
+                {
+                    J(document.body).trigger("keyUp",pKey);
+//                     document.getElementById("info_key").innerHTML = pKey;
+                };
+                /**
+                 * onComplete event
+                 */
+                this.onFinished = function()
+                {
+                    console.log("FLV finished");
+                    var vid = J(this.element).find("object")[0];
+                    vid.stop();
+                    vid.play();
+                };
+                /**
+                 * Update
+                 */
+                this.onUpdate = function()
+                {
+                  if(this.element){
+                  el = J(this.element).find("object")[0];
+                  el.readyState = 1;
+                  el.duration = this.duration/1000;
+                  el.currentTime = this.position/1000;
+                  el.volume = this.volume/100;
+
+                  if(seek_back_pending){
+                    if(last_seek_result_time>0){
+                    // what a mess... should be fired as afterSeek event:
+                      // seeking back.
+                      // check if two last seeks points to the same time (it means seeking by just five seconds back is not possible),
+                      // then go back by another five seconds
+                      console.log("last_seek_result_time: "+last_seek_result_time, "el.currentTime: "+el.currentTime);
+                      if(parseInt(10*el.currentTime) == parseInt(10*last_seek_result_time)){
+                        step = last_seek_offset*2;
+                        J(el).trigger( J.Event("seek_sec",{value:step}) );
+                        return false;
+                      }
+                    }
+                    last_seek_result_time = el.currentTime;
+                    seek_back_pending = false;
+                  }
+
+                  J(el).trigger("timeupdate");
+//                     document.getElementById("info_playing").innerHTML = this.isPlaying;
+//                     document.getElementById("info_url").innerHTML = this.url;
+//                     document.getElementById("info_volume").innerHTML = this.volume;
+//                     document.getElementById("info_position").innerHTML = this.position;
+//                     document.getElementById("info_duration").innerHTML = this.duration;
+//                     document.getElementById("info_buffer").innerHTML = this.bufferLength + "/" + this.bufferTime;
+//                     document.getElementById("info_bytes").innerHTML = this.bytesLoaded + "/" + this.bytesTotal + " (" + this.bytesPercent + "%)";
+
+                    el.paused = !(this.isPlaying == "true");
+//                     document.getElementById("playerplay").style.display = (isPlaying)?"none":"block";
+//                     document.getElementById("playerpause").style.display = (isPlaying)?"block":"none";
+
+//                     var timelineWidth = 160;
+//                     var sliderWidth = 40;
+//                     var sliderPositionMin = 40;
+//                     var sliderPositionMax = sliderPositionMin + timelineWidth - sliderWidth;
+//                     var sliderPosition = sliderPositionMin + Math.round((timelineWidth - sliderWidth) * this.position / this.duration);
+//
+//                     if (sliderPosition < sliderPositionMin) {
+//                         sliderPosition = sliderPositionMin;
+//                     }
+//                     if (sliderPosition > sliderPositionMax) {
+//                         sliderPosition = sliderPositionMax;
+//                     }
+
+//                     document.getElementById("playerslider").style.left = sliderPosition+"px";
+                  }
+                };
+
+//                 this.getFlashObject = function()
+//                 {
+// //                     return document.getElementById("myFlash");
+//                     return document.getElementsByTagName("object")[0];
+//                 }
+//                 this.play = function()
+//                 {
+// //                     if (myListener.position == 0) {
+// //                         getFlashObject().SetVariable("method:setUrl", "http://flv-player.net/medias/KyodaiNoGilga.flv");
+// //                     }
+//                     if(!this.url){
+//                       alert("no url set");
+//                       return false;
+//                     }
+//                     this.getFlashObject().SetVariable("method:play", "");
+//                 };
+//                 function pause()
+//                 {
+//                     getFlashObject().SetVariable("method:pause", "");
+//                 }
+//                 this.stop = function()
+//                 {
+//                     this.getFlashObject().SetVariable("method:stop", "");
+//                 };
+                function setWidth()
+                {
+                    var width = document.getElementById("inputWidth").value;
+                    getFlashObject().width = width+"px";
+                }
+                function setHeight()
+                {
+                    var height = document.getElementById("inputHeight").value;
+                    getFlashObject().height = height+"px";
+                }
+                function setPosition()
+                {
+                    var position = document.getElementById("inputPosition").value;
+                    getFlashObject().SetVariable("method:setPosition", position);
+                }
+                function setVolume()
+                {
+                    var volume = document.getElementById("inputVolume").value;
+                    getFlashObject().SetVariable("method:setVolume", volume);
+                }
+                function loadImage()
+                {
+                    var url = document.getElementById("inputImage").value;
+                    var depth = document.getElementById("inputImageDepth").value;
+                    var verticalAlign = document.getElementById("inputImageVertical").value;
+                    var horizontalAlign = document.getElementById("inputImageHorizontal").value;
+
+                    getFlashObject().SetVariable("method:loadMovieOnTop", url+"|"+depth+"|"+verticalAlign+"|"+horizontalAlign);
+                }
+                function unloadImage()
+                {
+                    var depth = document.getElementById("inputUnloadDepth").value;
+                    getFlashObject().SetVariable("method:unloadMovieOnTop", depth);
+                }
+
+
+  }
+
+            //]]>
+            </script>
+            <!--[if IE]>
+            <script type="text/javascript" event="FSCommand(command,args)" for="myFlash">
+            eval(args);
+            </script>
+            <![endif]-->
+</body>
+</html>
